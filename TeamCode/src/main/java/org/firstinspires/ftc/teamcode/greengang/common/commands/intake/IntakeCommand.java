@@ -12,8 +12,7 @@ public class IntakeCommand extends SequentialCommandGroup {
     public IntakeCommand(){
         super(
                 new SequentialCommandGroup(
-                        new StartIntakeCommand(),
-                        new ExtendHardstopCommand()
+                        new StartIntakeCommand()
                 )
         );
     }

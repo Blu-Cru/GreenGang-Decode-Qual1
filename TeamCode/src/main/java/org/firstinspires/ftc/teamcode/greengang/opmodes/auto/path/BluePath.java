@@ -25,13 +25,11 @@ public class BluePath extends GreenLinearOpMode {
 
         startPose = new Pose2d(63, -24, Math.toRadians(-90));
 
-        // Set initial pose
         drivetrain.drive.localizer.setPose(startPose);
 
-        // Build path ONCE
         path = drivetrain.drive.actionBuilder(startPose)
                 .splineToLinearHeading(
-                        new Pose2d(0, 0, Math.toRadians(225)),
+                        new Pose2d(-24, -24, Math.toRadians(225)),
                         Math.toRadians(225)
                 )
                 .waitSeconds(2)
@@ -43,7 +41,7 @@ public class BluePath extends GreenLinearOpMode {
                 .waitSeconds(1)
                 .setReversed(true)
                 .splineToLinearHeading(
-                        new Pose2d(0, 0, Math.toRadians(225)),
+                        new Pose2d(-24, -24, Math.toRadians(225)),
                         Math.toRadians(225)
                 )
                 .waitSeconds(2)
@@ -56,12 +54,11 @@ public class BluePath extends GreenLinearOpMode {
 
     @Override
     public void onStart() {
-
+        Actions.runBlocking(path);
     }
 
     @Override
     public void periodic(){
-        Actions.runBlocking(path);
     }
 
     @Override

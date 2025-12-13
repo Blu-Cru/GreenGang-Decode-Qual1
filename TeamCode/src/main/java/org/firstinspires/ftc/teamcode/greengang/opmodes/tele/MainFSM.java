@@ -91,11 +91,6 @@ public class MainFSM extends GreenLinearOpMode {
                             new OuttakeCommand()
                     ).schedule();
                 })
-                .onExit(() -> {
-                    new SequentialCommandGroup(
-                            new RetractHardstopCommand()
-                    ).schedule();
-                })
 
                 //outtake
                 .state(State.OUTTAKE)
