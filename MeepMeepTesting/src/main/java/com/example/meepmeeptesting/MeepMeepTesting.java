@@ -26,6 +26,7 @@ public class MeepMeepTesting {
                         Math.toRadians(-90)
                 )
                 .lineToY(-52)
+                .setReversed(true)
                 .splineToLinearHeading(
                         new Pose2d(0, 0, Math.toRadians(225)),
                         Math.toRadians(225)
