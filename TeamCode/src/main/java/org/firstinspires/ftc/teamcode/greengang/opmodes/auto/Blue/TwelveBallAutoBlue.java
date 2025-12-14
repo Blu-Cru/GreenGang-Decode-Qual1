@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.greengang.opmodes.auto.Blue;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.arcrobotics.ftclib.command.Command;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.MoveKickerDownCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.StartFlywheelCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.StopLiftingBallCommand;
+import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.StopShooterCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.intake.IntakeCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.shoot.ShootCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.util.CommandToAction;
@@ -21,14 +23,35 @@ import org.firstinspires.ftc.teamcode.greengang.common.util.Robot;
 import org.firstinspires.ftc.teamcode.greengang.opmodes.GreenLinearOpMode;
 
 @Autonomous(group = "auto")
-public class BluePathPark extends GreenLinearOpMode {
+public class TwelveBallAutoBlue extends GreenLinearOpMode {
 
     private Action path;
-    private Pose2d startPose;
 
     private static double deg(double d) {
         return Math.toRadians(d);
     }
+
+    CommandToAction startFlywheel =
+        new CommandToAction(
+            new SequentialCommandGroup(
+                    new StopIntakeCommand(),
+                    new StartFlywheelCommand(),
+                    new RetractHardstopCommand()
+            )
+        );
+
+    CommandToAction intake =
+            new CommandToAction(
+                    new SequentialCommandGroup(
+                            new ExtendHardstopCommand(),
+                            new IntakeCommand()
+                    )
+            );
+
+    CommandToAction shoot =
+            new CommandToAction(
+                    new ShootCommand()
+            );
 
     @Override
     public void initialize() {
@@ -39,7 +62,7 @@ public class BluePathPark extends GreenLinearOpMode {
         addKicker();
         addIntake();
 
-        startPose = new Pose2d(-50, -50, deg(225));
+        Pose2d startPose = new Pose2d(-50, -50, deg(225));
         drivetrain.drive.localizer.setPose(startPose);
 
         path = drivetrain.drive.actionBuilder(startPose)
@@ -52,41 +75,19 @@ public class BluePathPark extends GreenLinearOpMode {
                 )
 
                 // shoot
-                .stopAndAdd(
-                        new CommandToAction(
-                                new SequentialCommandGroup(
-                                        new StartFlywheelCommand(),
-                                        new ShootCommand()
-                                )
-                        )
-                )
+                .stopAndAdd(shoot)
 
                 .setReversed(false)
                 .setTangent(deg(0))
                 .splineToSplineHeading(
-                        new Pose2d(-12, -22, deg(-90)),
+                        new Pose2d(-12, -30, deg(-90)),
                         deg(-90)
                 )
 
                 // intake
-                .stopAndAdd(
-                        new CommandToAction(
-                                new SequentialCommandGroup(
-                                        new ExtendHardstopCommand(),
-                                        new IntakeCommand()
-                                )
-                        )
-                )
+                .stopAndAdd(intake)
                 .lineToY(-50)
-                .stopAndAdd(
-                        new CommandToAction(
-                                new SequentialCommandGroup(
-                                        new StopIntakeCommand(),
-                                        new StartFlywheelCommand(),
-                                        new RetractHardstopCommand()
-                                )
-                        )
-                )
+                .stopAndAdd(startFlywheel)
 
                 .setReversed(true)
                 .setTangent(deg(112))
@@ -96,40 +97,19 @@ public class BluePathPark extends GreenLinearOpMode {
                 )
 
                 // shoot
-                .stopAndAdd(
-                        new CommandToAction(
-                                new SequentialCommandGroup(
-                                        new ShootCommand()
-                                )
-                        )
-                )
+                .stopAndAdd(shoot)
 
                 .setReversed(false)
                 .setTangent(deg(0))
                 .splineToSplineHeading(
-                        new Pose2d(14, -22, deg(-90)),
+                        new Pose2d(14, -35, deg(-90)),
                         deg(-90)
                 )
 
                 // intake
-                .stopAndAdd(
-                        new CommandToAction(
-                                new SequentialCommandGroup(
-                                        new ExtendHardstopCommand(),
-                                        new IntakeCommand()
-                                )
-                        )
-                )
+                .stopAndAdd(intake)
                 .lineToY(-55)
-                .stopAndAdd(
-                        new CommandToAction(
-                                new SequentialCommandGroup(
-                                        new StopIntakeCommand(),
-                                        new StartFlywheelCommand(),
-                                        new RetractHardstopCommand()
-                                )
-                        )
-                )
+                .stopAndAdd(startFlywheel)
 
                 .setReversed(true)
                 .setTangent(deg(60))
@@ -138,39 +118,18 @@ public class BluePathPark extends GreenLinearOpMode {
                         deg(139)
                 )
 
-                .stopAndAdd(
-                        new CommandToAction(
-                                new SequentialCommandGroup(
-                                        new ShootCommand()
-                                )
-                        )
-                )
+                .stopAndAdd(shoot)
 
                 .setReversed(false)
                 .setTangent(deg(0))
                 .splineToSplineHeading(
-                        new Pose2d(36, -22, deg(-90)),
+                        new Pose2d(36, -40, deg(-90)),
                         deg(-90)
                 )
 
-                .stopAndAdd(
-                        new CommandToAction(
-                                new SequentialCommandGroup(
-                                        new ExtendHardstopCommand(),
-                                        new IntakeCommand()
-                                )
-                        )
-                )
+                .stopAndAdd(intake)
                 .lineToY(-55)
-                .stopAndAdd(
-                        new CommandToAction(
-                                new SequentialCommandGroup(
-                                        new StopIntakeCommand(),
-                                        new StartFlywheelCommand(),
-                                        new RetractHardstopCommand()
-                                )
-                        )
-                )
+                .stopAndAdd(startFlywheel)
 
                 .setReversed(true)
                 .setTangent(deg(130))
@@ -180,19 +139,14 @@ public class BluePathPark extends GreenLinearOpMode {
                 )
 
                 // shoot
-                .stopAndAdd(
-                        new CommandToAction(
-                                new SequentialCommandGroup(
-                                        new ShootCommand()
-                                )
-                        )
-                )
+                .stopAndAdd(shoot)
 
+                //kill
                 .stopAndAdd(
                         new CommandToAction(
                                 new SequentialCommandGroup(
                                         new StopIntakeCommand(),
-                                        new StopLiftingBallCommand(),
+                                        new StopShooterCommand(),
                                         new MoveKickerDownCommand()
                                 )
                         )
@@ -214,6 +168,7 @@ public class BluePathPark extends GreenLinearOpMode {
     @Override
     public void telemetry(Telemetry tele) {
         Pose2d p = drivetrain.drive.localizer.getPose();
+
         tele.addData("x", p.position.x);
         tele.addData("y", p.position.y);
         tele.addData("heading (deg)", Math.toDegrees(p.heading.toDouble()));

@@ -19,72 +19,85 @@ public class MeepMeepTesting {
                 .build();
 
         myBot.runAction(
-                myBot.getDrive().actionBuilder(new Pose2d(-48, -48, deg(225)))
+                myBot.getDrive().actionBuilder(new Pose2d(-50, 50, deg(-225)))
 
                         .setReversed(true)
-                        .setTangent(deg(45))
+                        .setTangent(deg(-45))
                         .splineToSplineHeading(
-                                new Pose2d(-24, -24, deg(225)),
-                                deg(45)
+                                new Pose2d(-24, 24, deg(-225)),
+                                deg(-45)
                         )
+
+                        // .waitSeconds(1)
 
                         // shoot
 
                         .setReversed(false)
                         .setTangent(deg(0))
                         .splineToSplineHeading(
-                                new Pose2d(-12, -22, deg(-90)),
-                                deg(-90)
+                                new Pose2d(-12, 30, deg(90)),
+                                deg(90)
                         )
+
+                        // .waitSeconds(1)
 
                         // intake
-                        .lineToY(-50)
+                        .lineToY(50)
 
                         .setReversed(true)
-                        .setTangent(deg(112))
+                        .setTangent(deg(-112))
                         .splineToSplineHeading(
-                                new Pose2d(-24, -24, deg(225)),
-                                deg(112)
+                                new Pose2d(-24, 24, deg(-225)),
+                                deg(-112)
                         )
+                        //.waitSeconds(1)
 
                         // shoot
 
                         .setReversed(false)
                         .setTangent(deg(0))
                         .splineToSplineHeading(
-                                new Pose2d(14, -22, deg(-90)),
-                                deg(-90)
+                                new Pose2d(14, 35, deg(90)),
+                                deg(90)
                         )
+
+                        // .waitSeconds(1)
 
                         // intake
-                        .lineToY(-55)
+                        .lineToY(55)
 
                         .setReversed(true)
-                        .setTangent(deg(60))
+                        .setTangent(deg(-60))
                         .splineToSplineHeading(
-                                new Pose2d(-24, -24, deg(225)),
-                                deg(139)
+                                new Pose2d(-24, 24, deg(-225)),
+                                deg(-139)
                         )
 
+                        //.waitSeconds(1)
 
                         .setReversed(false)
                         .setTangent(deg(0))
                         .splineToSplineHeading(
-                                new Pose2d(36, -22, deg(-90)),
-                                deg(-90)
+                                new Pose2d(36, 40, deg(90)),
+                                deg(90)
                         )
 
-                        .lineToY(-55)
+                        //.waitSeconds(1)
+
+                        .lineToY(55)
+
+                        //.waitSeconds(1)
 
                         .setReversed(true)
-                        .setTangent(deg(130))
+                        .setTangent(deg(-130))
                         .splineToSplineHeading(
-                                new Pose2d(-24, -24, deg(225)),
-                                deg(153)
+                                new Pose2d(-24, 24, deg(-225)),
+                                deg(-153)
                         )
-                        .build());
+                        .build()
+        );
 
-        meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)
+        meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_JUICE_BLACK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
                 .addEntity(myBot)
