@@ -35,7 +35,7 @@ public class ShootCommand extends SequentialCommandGroup {
 //
 //                            return Math.abs(current - target) <= target * 0.1;
 //                        }),
-                        new WaitCommand(1500),
+                        new WaitCommand(1750),
                         new KickBallCommand(),
                         new StopLiftingBallCommand(),
                         new ExtendHardstopCommand(),

@@ -21,15 +21,15 @@ public class MeepMeepTesting {
         myBot.runAction(
                 myBot.getDrive().actionBuilder(new Pose2d(-48, -48, deg(225)))
 
-                        // Start -> Hub: travel direction is basically 45° (straight diagonal), keep it low-curvature
-                        .setReversed(false)
+                        .setReversed(true)
                         .setTangent(deg(45))
                         .splineToSplineHeading(
                                 new Pose2d(-24, -24, deg(225)),
                                 deg(45)
                         )
 
-                        // Hub -> -12,-22: mostly "to the right", finish traveling downward for the lineToY
+                        // shoot
+
                         .setReversed(false)
                         .setTangent(deg(0))
                         .splineToSplineHeading(
@@ -37,36 +37,36 @@ public class MeepMeepTesting {
                                 deg(-90)
                         )
 
-                        .lineToY(-55)
+                        // intake
+                        .lineToY(-50)
 
-                        // Return (-12,-55) -> Hub: match the straight-line direction to reduce bending
-                        // Vector from (-12,-55) to (-24,-24) is (-12, +31) ~= 112°
-                        .setReversed(false)
+                        .setReversed(true)
                         .setTangent(deg(112))
                         .splineToSplineHeading(
                                 new Pose2d(-24, -24, deg(225)),
                                 deg(112)
                         )
 
-                        // Hub -> +12,-22
+                        // shoot
+
                         .setReversed(false)
                         .setTangent(deg(0))
                         .splineToSplineHeading(
-                                new Pose2d(12, -22, deg(-90)),
+                                new Pose2d(14, -22, deg(-90)),
                                 deg(-90)
                         )
 
+                        // intake
                         .lineToY(-55)
 
-                        // Return (12,-55) -> Hub: vector (-36, +31) ~= 139°
-                        .setReversed(false)
-                        .setTangent(deg(139))
+                        .setReversed(true)
+                        .setTangent(deg(60))
                         .splineToSplineHeading(
                                 new Pose2d(-24, -24, deg(225)),
                                 deg(139)
                         )
 
-                        // Hub -> 36,-22
+
                         .setReversed(false)
                         .setTangent(deg(0))
                         .splineToSplineHeading(
@@ -76,16 +76,13 @@ public class MeepMeepTesting {
 
                         .lineToY(-55)
 
-                        // Return (36,-55) -> Hub: vector (-60, +31) ~= 153°
-                        .setReversed(false)
-                        .setTangent(deg(153))
+                        .setReversed(true)
+                        .setTangent(deg(130))
                         .splineToSplineHeading(
                                 new Pose2d(-24, -24, deg(225)),
                                 deg(153)
                         )
-
-                        .build()
-        );
+                        .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)
                 .setDarkMode(true)

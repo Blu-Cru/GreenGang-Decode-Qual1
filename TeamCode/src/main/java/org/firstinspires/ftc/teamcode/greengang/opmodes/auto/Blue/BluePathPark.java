@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.greengang.opmodes.auto.Blue;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -15,7 +14,6 @@ import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.MoveKickerDownCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.StartFlywheelCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.StopLiftingBallCommand;
-import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.StopShooterCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.intake.IntakeCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.shoot.ShootCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.util.CommandToAction;
@@ -28,6 +26,10 @@ public class BluePathPark extends GreenLinearOpMode {
     private Action path;
     private Pose2d startPose;
 
+    private static double deg(double d) {
+        return Math.toRadians(d);
+    }
+
     @Override
     public void initialize() {
         addDrivetrain();
@@ -37,18 +39,19 @@ public class BluePathPark extends GreenLinearOpMode {
         addKicker();
         addIntake();
 
-        startPose = new Pose2d(63, -24, Math.toRadians(-90));
+        startPose = new Pose2d(-50, -50, deg(225));
         drivetrain.drive.localizer.setPose(startPose);
 
         path = drivetrain.drive.actionBuilder(startPose)
 
-                .setTangent(Math.toRadians(160))
+                .setReversed(true)
+                .setTangent(deg(45))
                 .splineToSplineHeading(
-                        new Pose2d(-24, -24, Math.toRadians(225)),
-                        Math.toRadians(180)
+                        new Pose2d(-24, -24, deg(225)),
+                        deg(45)
                 )
 
-                //shoot
+                // shoot
                 .stopAndAdd(
                         new CommandToAction(
                                 new SequentialCommandGroup(
@@ -58,15 +61,14 @@ public class BluePathPark extends GreenLinearOpMode {
                         )
                 )
 
-
-                // Hub -> -12,-22: end facing -90, approach downward so lineToY is clean
-                .setTangent(Math.toRadians(0))
+                .setReversed(false)
+                .setTangent(deg(0))
                 .splineToSplineHeading(
-                        new Pose2d(-12, -22, Math.toRadians(-90)),
-                        Math.toRadians(-90)
+                        new Pose2d(-12, -22, deg(-90)),
+                        deg(-90)
                 )
 
-                //intake
+                // intake
                 .stopAndAdd(
                         new CommandToAction(
                                 new SequentialCommandGroup(
@@ -75,7 +77,7 @@ public class BluePathPark extends GreenLinearOpMode {
                                 )
                         )
                 )
-                .lineToY(-55 )
+                .lineToY(-50)
                 .stopAndAdd(
                         new CommandToAction(
                                 new SequentialCommandGroup(
@@ -87,16 +89,13 @@ public class BluePathPark extends GreenLinearOpMode {
                 )
 
                 .setReversed(true)
-
-                // Return -> Hub: keep facing 225, but arc UP into hub (end tangent ~135)
-                .setTangent(Math.toRadians(90))
+                .setTangent(deg(112))
                 .splineToSplineHeading(
-                        new Pose2d(-24, -24, Math.toRadians(225)),
-                        Math.toRadians(135)
+                        new Pose2d(-24, -24, deg(225)),
+                        deg(112)
                 )
 
-                //shoot
-
+                // shoot
                 .stopAndAdd(
                         new CommandToAction(
                                 new SequentialCommandGroup(
@@ -105,13 +104,14 @@ public class BluePathPark extends GreenLinearOpMode {
                         )
                 )
 
-
-                // Hub -> +12,-22: same idea
-                .setTangent(Math.toRadians(0))
+                .setReversed(false)
+                .setTangent(deg(0))
                 .splineToSplineHeading(
-                        new Pose2d(12, -22, Math.toRadians(-90)),
-                        Math.toRadians(-90)
+                        new Pose2d(14, -22, deg(-90)),
+                        deg(-90)
                 )
+
+                // intake
                 .stopAndAdd(
                         new CommandToAction(
                                 new SequentialCommandGroup(
@@ -120,7 +120,7 @@ public class BluePathPark extends GreenLinearOpMode {
                                 )
                         )
                 )
-                .lineToY(-55 )
+                .lineToY(-55)
                 .stopAndAdd(
                         new CommandToAction(
                                 new SequentialCommandGroup(
@@ -132,15 +132,11 @@ public class BluePathPark extends GreenLinearOpMode {
                 )
 
                 .setReversed(true)
-
-                // Return -> Hub: arc UP into hub again
-                .setTangent(Math.toRadians(90))
+                .setTangent(deg(60))
                 .splineToSplineHeading(
-                        new Pose2d(-24, -24, Math.toRadians(225)),
-                        Math.toRadians(135)
+                        new Pose2d(-24, -24, deg(225)),
+                        deg(139)
                 )
-
-                //shoot
 
                 .stopAndAdd(
                         new CommandToAction(
@@ -150,14 +146,13 @@ public class BluePathPark extends GreenLinearOpMode {
                         )
                 )
 
-                // Hub -> 36,-22
-                .setTangent(Math.toRadians(0))
+                .setReversed(false)
+                .setTangent(deg(0))
                 .splineToSplineHeading(
-                        new Pose2d(36, -22, Math.toRadians(-90)),
-                        Math.toRadians(-90)
+                        new Pose2d(36, -22, deg(-90)),
+                        deg(-90)
                 )
 
-                //intake
                 .stopAndAdd(
                         new CommandToAction(
                                 new SequentialCommandGroup(
@@ -166,7 +161,7 @@ public class BluePathPark extends GreenLinearOpMode {
                                 )
                         )
                 )
-                .lineToY(-55 )
+                .lineToY(-55)
                 .stopAndAdd(
                         new CommandToAction(
                                 new SequentialCommandGroup(
@@ -178,14 +173,13 @@ public class BluePathPark extends GreenLinearOpMode {
                 )
 
                 .setReversed(true)
-
-                // Return -> Hub
-                .setTangent(Math.toRadians(90))
+                .setTangent(deg(130))
                 .splineToSplineHeading(
-                        new Pose2d(-24, -24, Math.toRadians(225)),
-                        Math.toRadians(135)
+                        new Pose2d(-24, -24, deg(225)),
+                        deg(153)
                 )
 
+                // shoot
                 .stopAndAdd(
                         new CommandToAction(
                                 new SequentialCommandGroup(
@@ -203,7 +197,6 @@ public class BluePathPark extends GreenLinearOpMode {
                                 )
                         )
                 )
-
 
                 .build();
     }
