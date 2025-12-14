@@ -52,9 +52,7 @@ public class BluePathPark extends GreenLinearOpMode {
                 .stopAndAdd(
                         new CommandToAction(
                                 new SequentialCommandGroup(
-                                        new RetractHardstopCommand(),
                                         new StartFlywheelCommand(),
-                                        new WaitCommand(500),
                                         new ShootCommand()
                                 )
                         )
@@ -80,7 +78,11 @@ public class BluePathPark extends GreenLinearOpMode {
                 .lineToY(-55 )
                 .stopAndAdd(
                         new CommandToAction(
-                                new StopIntakeCommand()
+                                new SequentialCommandGroup(
+                                        new StopIntakeCommand(),
+                                        new StartFlywheelCommand(),
+                                        new RetractHardstopCommand()
+                                )
                         )
                 )
 
@@ -98,9 +100,6 @@ public class BluePathPark extends GreenLinearOpMode {
                 .stopAndAdd(
                         new CommandToAction(
                                 new SequentialCommandGroup(
-                                        new RetractHardstopCommand(),
-                                        new StartFlywheelCommand(),
-                                        new WaitCommand(500),
                                         new ShootCommand()
                                 )
                         )
@@ -124,7 +123,11 @@ public class BluePathPark extends GreenLinearOpMode {
                 .lineToY(-55 )
                 .stopAndAdd(
                         new CommandToAction(
-                                new StopIntakeCommand()
+                                new SequentialCommandGroup(
+                                        new StopIntakeCommand(),
+                                        new StartFlywheelCommand(),
+                                        new RetractHardstopCommand()
+                                )
                         )
                 )
 
@@ -142,9 +145,6 @@ public class BluePathPark extends GreenLinearOpMode {
                 .stopAndAdd(
                         new CommandToAction(
                                 new SequentialCommandGroup(
-                                        new RetractHardstopCommand(),
-                                        new StartFlywheelCommand(),
-                                        new WaitCommand(500),
                                         new ShootCommand()
                                 )
                         )
@@ -169,7 +169,11 @@ public class BluePathPark extends GreenLinearOpMode {
                 .lineToY(-55 )
                 .stopAndAdd(
                         new CommandToAction(
-                                new StopIntakeCommand()
+                                new SequentialCommandGroup(
+                                        new StopIntakeCommand(),
+                                        new StartFlywheelCommand(),
+                                        new RetractHardstopCommand()
+                                )
                         )
                 )
 
@@ -180,6 +184,14 @@ public class BluePathPark extends GreenLinearOpMode {
                 .splineToSplineHeading(
                         new Pose2d(-24, -24, Math.toRadians(225)),
                         Math.toRadians(135)
+                )
+
+                .stopAndAdd(
+                        new CommandToAction(
+                                new SequentialCommandGroup(
+                                        new ShootCommand()
+                                )
+                        )
                 )
 
                 .stopAndAdd(

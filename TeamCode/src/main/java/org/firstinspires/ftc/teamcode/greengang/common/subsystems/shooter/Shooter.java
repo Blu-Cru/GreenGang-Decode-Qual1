@@ -35,6 +35,8 @@ public class Shooter implements GreenSubsystem, Subsystem {
     AprilTagTargeting targeting;
     Servo hoodServo;
 
+    public boolean started = false;
+
     public Shooter(HardwareMap hardwareMap){
         flywheel = hardwareMap.get(DcMotorEx.class, "flywheel");
         hoodServo = hardwareMap.get(Servo.class, "hood");
@@ -107,6 +109,11 @@ public class Shooter implements GreenSubsystem, Subsystem {
 
     @Override
     public void update(){
+        if(!started){
+            startFlywheel();
+            started = true;
+        }
+
         velocity = flywheel.getVelocity();
 
         updateHood();
