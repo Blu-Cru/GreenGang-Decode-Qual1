@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.greengang.opmodes.auto.Blue;
+package org.firstinspires.ftc.teamcode.greengang.opmodes.auto.Red; // Changed package to Red
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.greengang.common.util.Robot;
 import org.firstinspires.ftc.teamcode.greengang.opmodes.GreenLinearOpMode;
 
 @Autonomous(group = "auto", preselectTeleOp = "RCSMTeleOp")
-public class BluePathPark extends GreenLinearOpMode {
+public class RedPathPark extends GreenLinearOpMode { // Changed class name
 
     private Action path;
     private Pose2d startPose;
@@ -39,16 +39,24 @@ public class BluePathPark extends GreenLinearOpMode {
         addKicker();
         addIntake();
 
-        startPose = new Pose2d(-50, -50, deg(225));
+        // X-AXIS REFLECTION: Y -> -Y, Heading -> -Heading
+        // Original: startPose = new Pose2d(-50, -50, deg(225));
+        startPose = new Pose2d(-50, 50, deg(-225)); // Hardcoded Reflection
         drivetrain.drive.localizer.setPose(startPose);
 
         path = drivetrain.drive.actionBuilder(startPose)
 
-                .setReversed(true)
-                .setTangent(deg(45))
+                // Original: .setReversed(true) -> SWAPPED: .setReversed(false)
+                .setReversed(false)
+
+                // Original: deg(45) -> Hardcoded: deg(-45)
+                .setTangent(deg(-45))
+
+                // Original: new Pose2d(-24, -24, deg(225)), deg(45)
+                // Reflected: (-24, 24, -225 deg), -45 deg
                 .splineToSplineHeading(
-                        new Pose2d(-24, -24, deg(225)),
-                        deg(45)
+                        new Pose2d(-24, 24, deg(-225)),
+                        deg(-45)
                 )
 
                 // shoot
@@ -61,11 +69,17 @@ public class BluePathPark extends GreenLinearOpMode {
                         )
                 )
 
-                .setReversed(false)
+                // Original: .setReversed(false) -> SWAPPED: .setReversed(true)
+                .setReversed(true)
+
+                // Original: deg(0) -> Hardcoded: deg(0)
                 .setTangent(deg(0))
+
+                // Original: new Pose2d(-12, -22, deg(-90)), deg(-90)
+                // Reflected: (-12, 22, 90 deg), 90 deg
                 .splineToSplineHeading(
-                        new Pose2d(-12, -22, deg(-90)),
-                        deg(-90)
+                        new Pose2d(-12, 30, deg(90)),
+                        deg(90)
                 )
 
                 // intake
@@ -77,7 +91,9 @@ public class BluePathPark extends GreenLinearOpMode {
                                 )
                         )
                 )
-                .lineToY(-50)
+
+                // Original: .lineToY(-50) -> Hardcoded: .lineToY(50)
+                .lineToY(67)
                 .stopAndAdd(
                         new CommandToAction(
                                 new SequentialCommandGroup(
@@ -88,11 +104,17 @@ public class BluePathPark extends GreenLinearOpMode {
                         )
                 )
 
-                .setReversed(true)
-                .setTangent(deg(112))
+                // Original: .setReversed(true) -> SWAPPED: .setReversed(false)
+                .setReversed(false)
+
+                // Original: deg(112) -> Hardcoded: deg(-112)
+                .setTangent(deg(-112))
+
+                // Original: new Pose2d(-24, -24, deg(225)), deg(112)
+                // Reflected: (-24, 24, -225 deg), -112 deg
                 .splineToSplineHeading(
-                        new Pose2d(-24, -24, deg(225)),
-                        deg(112)
+                        new Pose2d(-24, 24, deg(-225)),
+                        deg(-112)
                 )
 
                 // shoot
@@ -104,11 +126,17 @@ public class BluePathPark extends GreenLinearOpMode {
                         )
                 )
 
-                .setReversed(false)
+                // Original: .setReversed(false) -> SWAPPED: .setReversed(true)
+                .setReversed(true)
+
+                // Original: deg(0) -> Hardcoded: deg(0)
                 .setTangent(deg(0))
+
+                // Original: new Pose2d(14, -22, deg(-90)), deg(-90)
+                // Reflected: (14, 22, 90 deg), 90 deg
                 .splineToSplineHeading(
-                        new Pose2d(14, -22, deg(-90)),
-                        deg(-90)
+                        new Pose2d(10, 30, deg(90)),
+                        deg(90)
                 )
 
                 // intake
@@ -120,7 +148,9 @@ public class BluePathPark extends GreenLinearOpMode {
                                 )
                         )
                 )
-                .lineToY(-55)
+
+                // Original: .lineToY(-55) -> Hardcoded: .lineToY(55)
+                .lineToY(72)
                 .stopAndAdd(
                         new CommandToAction(
                                 new SequentialCommandGroup(
@@ -131,11 +161,17 @@ public class BluePathPark extends GreenLinearOpMode {
                         )
                 )
 
-                .setReversed(true)
-                .setTangent(deg(60))
+                // Original: .setReversed(true) -> SWAPPED: .setReversed(false)
+                .setReversed(false)
+
+                // Original: deg(60) -> Hardcoded: deg(-60)
+                .setTangent(deg(-60))
+
+                // Original: new Pose2d(-24, -24, deg(225)), deg(139)
+                // Reflected: (-24, 24, -225 deg), -139 deg
                 .splineToSplineHeading(
-                        new Pose2d(-24, -24, deg(225)),
-                        deg(139)
+                        new Pose2d(-24, 24, deg(-225)),
+                        deg(-139)
                 )
 
                 .stopAndAdd(
@@ -146,11 +182,17 @@ public class BluePathPark extends GreenLinearOpMode {
                         )
                 )
 
-                .setReversed(false)
+                // Original: .setReversed(false) -> SWAPPED: .setReversed(true)
+                .setReversed(true)
+
+                // Original: deg(0) -> Hardcoded: deg(0)
                 .setTangent(deg(0))
+
+                // Original: new Pose2d(36, -22, deg(-90)), deg(-90)
+                // Reflected: (36, 22, 90 deg), 90 deg
                 .splineToSplineHeading(
-                        new Pose2d(36, -22, deg(-90)),
-                        deg(-90)
+                        new Pose2d(34, 30, deg(90)),
+                        deg(90)
                 )
 
                 .stopAndAdd(
@@ -161,7 +203,9 @@ public class BluePathPark extends GreenLinearOpMode {
                                 )
                         )
                 )
-                .lineToY(-55)
+
+                // Original: .lineToY(-55) -> Hardcoded: .lineToY(55)
+                .lineToY(72)
                 .stopAndAdd(
                         new CommandToAction(
                                 new SequentialCommandGroup(
@@ -172,11 +216,17 @@ public class BluePathPark extends GreenLinearOpMode {
                         )
                 )
 
-                .setReversed(true)
-                .setTangent(deg(130))
+                // Original: .setReversed(true) -> SWAPPED: .setReversed(false)
+                .setReversed(false)
+
+                // Original: deg(130) -> Hardcoded: deg(-130)
+                .setTangent(deg(-130))
+
+                // Original: new Pose2d(-24, -24, deg(225)), deg(153)
+                // Reflected: (-24, 24, -225 deg), -153 deg
                 .splineToSplineHeading(
-                        new Pose2d(-24, -24, deg(225)),
-                        deg(153)
+                        new Pose2d(-24, 24, deg(-225)),
+                        deg(-153)
                 )
 
                 // shoot
