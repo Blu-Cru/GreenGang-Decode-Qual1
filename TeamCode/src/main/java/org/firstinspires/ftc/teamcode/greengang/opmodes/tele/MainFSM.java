@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.greengang.opmodes.tele;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.ExtendHardstopCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.RetractHardstopCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.intake.IntakeCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.StopIntakeCommand;
@@ -28,6 +30,7 @@ public class MainFSM extends GreenLinearOpMode {
         DEFAULT,
         INTAKE,
         OUTTAKE,
+        SPIN_FLYWHEEL,
         SHOOT,
     }
 
@@ -56,77 +59,79 @@ public class MainFSM extends GreenLinearOpMode {
 
         sm = new StateMachineBuilder()
 
-                //default
                 .state(State.DEFAULT)
-                .onEnter(() -> {})
-                .transition(() -> stickyG2.a, State.INTAKE, () -> {
-                    new IntakeCommand().schedule();
-                })
-                .transition(() -> stickyG2.b, State.OUTTAKE, () -> {
-                    new OuttakeCommand().schedule();
-                })
-                .transition(() -> stickyG2.dpad_down, State.SHOOT, () -> {
-                    new SequentialCommandGroup(
-                            new StartFlywheelCommand(),
-                            new ShootCommand()
-                    ).schedule();
-                })
-
-                //intake
-                .state(State.INTAKE)
-                .transition(() -> stickyG2.right_bumper, State.DEFAULT, () -> {
-                    new SequentialCommandGroup(
-                            new StopIntakeCommand()
-                    ).schedule();
-                })
-                .transition(() -> stickyG2.dpad_down, State.SHOOT, () -> {
+                .onEnter(() -> {
                     new SequentialCommandGroup(
                             new StopIntakeCommand(),
-                            new StartFlywheelCommand(),
-                            new ShootCommand()
-                    ).schedule();
-                })
-                .transition(() -> stickyG2.b, State.OUTTAKE, () -> {
-                    new SequentialCommandGroup(
-                            new OuttakeCommand()
-                    ).schedule();
-                })
-
-                //outtake
-                .state(State.OUTTAKE)
-                .transition(() -> stickyG2.right_bumper, State.DEFAULT, () -> {
-                    new SequentialCommandGroup(
-                            new StopIntakeCommand()
-                    ).schedule();
-                })
-                .transition(() -> stickyG2.a, State.INTAKE, () -> {
-                    new SequentialCommandGroup(
-                            new IntakeCommand()
-                    ).schedule();
-                })
-
-                //shoot command
-                .state(State.SHOOT)
-                .transition(() -> stickyG2.right_bumper, State.DEFAULT, () -> {
-                    new SequentialCommandGroup(
-                            new StopIntakeCommand(),
-                            new StopLiftingBallCommand(),
-                            new MoveKickerDownCommand()
-                    ).schedule();
-                })
-                .transition(() -> stickyG2.a, State.INTAKE, () -> {
-                    new SequentialCommandGroup(
-                            new IntakeCommand()
-                    ).schedule();
-                })
-
-                .onExit(() -> {
-                    new SequentialCommandGroup(
+                            new ExtendHardstopCommand(),
                             new StopShooterCommand()
                     ).schedule();
                 })
 
+                .transition(() -> (gamepad1.right_trigger > 0.1 && gamepad1.right_bumper), State.SHOOT)
+                .transition(() -> (gamepad1.right_trigger > 0.1 && !gamepad1.right_bumper), State.SPIN_FLYWHEEL)
+                .transition(() -> (gamepad1.left_trigger > 0.1 && gamepad1.right_trigger <= 0.1), State.INTAKE)
+                .transition(() -> gamepad1.square, State.OUTTAKE)
+
+                .state(State.INTAKE)
+                .onEnter(() -> {
+                    new SequentialCommandGroup(
+                            new ExtendHardstopCommand(),
+                            new StopShooterCommand(),
+                            new IntakeCommand()
+                    ).schedule();
+                })
+
+                .transition(() -> (gamepad1.right_trigger > 0.1 && gamepad1.right_bumper), State.SHOOT)
+                .transition(() -> (gamepad1.right_trigger > 0.1 && !gamepad1.right_bumper), State.SPIN_FLYWHEEL)
+                .transition(() -> gamepad1.square, State.OUTTAKE)
+                .transition(() -> (gamepad1.left_trigger <= 0.1), State.DEFAULT)
+
+                .state(State.OUTTAKE)
+                .onEnter(() -> {
+                    new SequentialCommandGroup(
+                            new ExtendHardstopCommand(),
+                            new StopShooterCommand(),
+                            new OuttakeCommand()
+                    ).schedule();
+                })
+
+                .transition(() -> (gamepad1.right_trigger > 0.1 && gamepad1.right_bumper), State.SHOOT)
+                .transition(() -> (gamepad1.right_trigger > 0.1 && !gamepad1.right_bumper), State.SPIN_FLYWHEEL)
+                .transition(() -> (gamepad1.left_trigger > 0.1 && gamepad1.right_trigger <= 0.1), State.INTAKE)
+                .transition(() -> (!gamepad1.square), State.DEFAULT)
+
+                .state(State.SPIN_FLYWHEEL)
+                .onEnter(() -> {
+                    new SequentialCommandGroup(
+                            new ExtendHardstopCommand(),
+                            new StopIntakeCommand(),
+                            new StartFlywheelCommand()
+                    ).schedule();
+                })
+
+                .transition(() -> (gamepad1.right_trigger > 0.1 && gamepad1.right_bumper), State.SHOOT)
+                .transition(() -> gamepad1.square, State.OUTTAKE)
+                .transition(() -> (gamepad1.left_trigger > 0.1 && gamepad1.right_trigger <= 0.1), State.INTAKE)
+                .transition(() -> (gamepad1.right_trigger <= 0.1), State.DEFAULT)
+
+                .state(State.SHOOT)
+                .onEnter(() -> {
+                    new SequentialCommandGroup(
+                            new StartFlywheelCommand(),
+                            new RetractHardstopCommand(),
+                            new WaitCommand(250),
+                            new IntakeCommand()
+                    ).schedule();
+                })
+
+                .transition(() -> (gamepad1.right_trigger > 0.1 && !gamepad1.right_bumper), State.SPIN_FLYWHEEL)
+                .transition(() -> (gamepad1.right_trigger <= 0.1 && gamepad1.left_trigger > 0.1), State.INTAKE)
+                .transition(() -> (gamepad1.right_trigger <= 0.1 && !gamepad1.square && gamepad1.left_trigger <= 0.1), State.DEFAULT)
+                .transition(() -> gamepad1.square, State.OUTTAKE)
+
                 .build();
+
 
 
         sm.setState(State.DEFAULT);

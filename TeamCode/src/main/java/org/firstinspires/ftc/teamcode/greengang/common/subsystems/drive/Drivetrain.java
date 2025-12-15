@@ -54,9 +54,8 @@ public class Drivetrain implements GreenSubsystem, Subsystem {
 
         boolean turningRightStick = Math.abs(turnInput) > deadzone;
 
-        if (g1.right_stick_button) {
+        if (g1.left_stick_button) {
             driverControlTurn = !driverControlTurn;
-            g1.rumbleBlips(driverControlTurn ? 1 : 2);
         }
 
         if (driverControlTurn) {
@@ -78,6 +77,13 @@ public class Drivetrain implements GreenSubsystem, Subsystem {
 
         drive.setDrivePowers(new PoseVelocity2d(
                 new Vector2d(rotX * drivePower, rotY * drivePower),
+                rot * drivePower
+        ));
+    }
+
+    public void robotCentricDrive(double x, double y, double rot){
+        drive.setDrivePowers(new PoseVelocity2d(
+                new Vector2d(x * drivePower, y * drivePower),
                 rot * drivePower
         ));
     }

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.greengang.common.subsystems.shooter;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.arcrobotics.ftclib.controller.PIDController;
@@ -109,7 +110,7 @@ public class Shooter implements GreenSubsystem, Subsystem {
 
     @Override
     public void update(){
-        if(!started){
+        if(!started && this instanceof Autonomous){
             startFlywheel();
             started = true;
         }
