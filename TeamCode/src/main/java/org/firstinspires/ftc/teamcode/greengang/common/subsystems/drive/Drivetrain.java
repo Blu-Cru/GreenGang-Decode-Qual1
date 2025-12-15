@@ -73,8 +73,8 @@ public class Drivetrain implements GreenSubsystem, Subsystem {
     }
 
     public void fieldCentricDrive(double x, double y, double rot) {
-        double rotX = x * Math.cos(heading) - y * Math.sin(heading);
-        double rotY = x * Math.sin(heading) + y * Math.cos(heading);
+        double rotX = x * Math.cos(-heading) - y * Math.sin(-heading);
+        double rotY = x * Math.sin(-heading) + y * Math.cos(-heading);
 
         drive.setDrivePowers(new PoseVelocity2d(
                 new Vector2d(rotX * drivePower, rotY * drivePower),
