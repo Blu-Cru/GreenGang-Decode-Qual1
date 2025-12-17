@@ -20,14 +20,18 @@ public class DrivePID {
     public void setTargetHeading(double target) {
         targetHeading = angleWrap(target);
         headingController.setSetPoint(0);
+    }
+    
+    public void reset() {
         headingController.reset();
     }
 
     public double getRotatePower(double currentHeading) {
+        headingController.setPID(kPHeading, kIHeading, kDHeading);
+
         double error = angleWrap(targetHeading - angleWrap(currentHeading));
         double output = headingController.calculate(error, 0);
 
-        //i dont know if this is necessary or not
         return Range.clip(output, -1, 1);
     }
 

@@ -88,6 +88,7 @@ public abstract class GreenLinearOpMode extends LinearOpMode {
             robot.update();
 
             telemetry();
+            telemetry(telemetry);
             robot.telemetry(telemetry);
             telemetry.addData("Loop Time", calculateAvgLoopTime());
 

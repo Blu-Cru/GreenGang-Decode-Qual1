@@ -110,7 +110,7 @@ public class Shooter implements GreenSubsystem, Subsystem {
 
     @Override
     public void update(){
-        if(!started && this instanceof Autonomous){
+        if(!started){
             startFlywheel();
             started = true;
         }

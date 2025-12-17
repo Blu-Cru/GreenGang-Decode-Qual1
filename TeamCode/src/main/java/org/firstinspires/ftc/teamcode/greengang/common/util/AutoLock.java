@@ -52,7 +52,7 @@ public class AutoLock implements GreenSubsystem, Subsystem {
             if(targetTag != null){
                 double xError = targetTag.getTargetXDegrees();
 
-                drivetrain.pid.setTargetHeading(drivetrain.heading + Math.toRadians(xError));
+                drivetrain.pid.setTargetHeading(drivetrain.heading - Math.toRadians(xError));
                 return;
             }
         }

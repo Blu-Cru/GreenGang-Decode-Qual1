@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.teamcode.greengang.common.util.Globals;
 import org.firstinspires.ftc.teamcode.greengang.common.util.GreenSubsystem;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
@@ -58,7 +59,10 @@ public class Drivetrain implements GreenSubsystem, Subsystem {
             driverControlTurn = !driverControlTurn;
         }
 
-        if (driverControlTurn) {
+        if (Globals.autoAimEnabled && g1.a) {
+            double rot = pid.getRotatePower(heading);
+            fieldCentricDrive(x, y, rot);
+        } else if (driverControlTurn) {
             if (turningRightStick) {
                 pid.setTargetHeading(heading);
                 fieldCentricDrive(x, y, turnInput);
