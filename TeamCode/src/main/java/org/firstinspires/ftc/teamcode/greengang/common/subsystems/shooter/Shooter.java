@@ -56,6 +56,8 @@ public class Shooter implements GreenSubsystem, Subsystem {
         flywheel.setDirection(DcMotorSimple.Direction.REVERSE);
 
         hoodServo.setPosition(DEFAULT_HOOD_POSITION);
+
+        startFlywheel();
     }
 
     public void setTargeting(AprilTagTargeting targeting) {

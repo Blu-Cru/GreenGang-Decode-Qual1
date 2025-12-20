@@ -31,28 +31,6 @@ public class TwelveBallAutoBlue extends GreenLinearOpMode {
         return Math.toRadians(d);
     }
 
-    CommandToAction startFlywheel =
-        new CommandToAction(
-            new SequentialCommandGroup(
-                    new StopIntakeCommand(),
-                    new StartFlywheelCommand(),
-                    new RetractHardstopCommand()
-            )
-        );
-
-    CommandToAction intake =
-            new CommandToAction(
-                    new SequentialCommandGroup(
-                            new ExtendHardstopCommand(),
-                            new IntakeCommand()
-                    )
-            );
-
-    CommandToAction shoot =
-            new CommandToAction(
-                    new ShootCommand()
-            );
-
     @Override
     public void initialize() {
         addDrivetrain();
@@ -62,7 +40,7 @@ public class TwelveBallAutoBlue extends GreenLinearOpMode {
         addKicker();
         addIntake();
 
-        Pose2d startPose = new Pose2d(-50, -50, deg(225));
+        Pose2d startPose = new Pose2d(-46.5, -51.5, deg(234.0949));
         drivetrain.drive.localizer.setPose(startPose);
 
         path = drivetrain.drive.actionBuilder(startPose)
@@ -75,7 +53,10 @@ public class TwelveBallAutoBlue extends GreenLinearOpMode {
                 )
 
                 // shoot
-                .stopAndAdd(shoot)
+                .stopAndAdd(
+                        new CommandToAction(
+                                new ShootCommand()
+                        ))
 
                 .setReversed(false)
                 .setTangent(deg(0))
@@ -85,9 +66,8 @@ public class TwelveBallAutoBlue extends GreenLinearOpMode {
                 )
 
                 // intake
-                .stopAndAdd(intake)
-                .lineToY(-50)
-                .stopAndAdd(startFlywheel)
+                .lineToY(-30)
+                .waitSeconds(0.25)
 
                 .setReversed(true)
                 .setTangent(deg(112))
@@ -97,7 +77,11 @@ public class TwelveBallAutoBlue extends GreenLinearOpMode {
                 )
 
                 // shoot
-                .stopAndAdd(shoot)
+                .stopAndAdd(
+                        new CommandToAction(
+                                new ShootCommand()
+                        )
+                )
 
                 .setReversed(false)
                 .setTangent(deg(0))
@@ -107,9 +91,8 @@ public class TwelveBallAutoBlue extends GreenLinearOpMode {
                 )
 
                 // intake
-                .stopAndAdd(intake)
-                .lineToY(-55)
-                .stopAndAdd(startFlywheel)
+                .lineToY(-30)
+                .waitSeconds(0.25)
 
                 .setReversed(true)
                 .setTangent(deg(60))
@@ -118,7 +101,11 @@ public class TwelveBallAutoBlue extends GreenLinearOpMode {
                         deg(139)
                 )
 
-                .stopAndAdd(shoot)
+                .stopAndAdd(
+                        new CommandToAction(
+                                new ShootCommand()
+                        )
+                )
 
                 .setReversed(false)
                 .setTangent(deg(0))
@@ -127,9 +114,8 @@ public class TwelveBallAutoBlue extends GreenLinearOpMode {
                         deg(-90)
                 )
 
-                .stopAndAdd(intake)
-                .lineToY(-55)
-                .stopAndAdd(startFlywheel)
+                .lineToY(-30)
+                .waitSeconds(0.25)
 
                 .setReversed(true)
                 .setTangent(deg(130))
@@ -139,7 +125,11 @@ public class TwelveBallAutoBlue extends GreenLinearOpMode {
                 )
 
                 // shoot
-                .stopAndAdd(shoot)
+                .stopAndAdd(
+                        new CommandToAction(
+                                new ShootCommand()
+                        )
+                )
 
                 //kill
                 .stopAndAdd(

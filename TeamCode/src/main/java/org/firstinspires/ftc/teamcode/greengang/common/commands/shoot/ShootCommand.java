@@ -28,18 +28,15 @@ public class ShootCommand extends SequentialCommandGroup {
 
                         */
                         new RetractHardstopCommand(),
-                        new IntakeCommand(),
 //                        new WaitUntilCommand(() -> {
 //                            double current = Robot.getInstance().sh.getFlywheelVelocity();
 //                            double target = Robot.getInstance().sh.getFlywheelTargetVelocity();
 //
 //                            return Math.abs(current - target) <= target * 0.1;
 //                        }),
-                        new WaitCommand(1750),
+                        new WaitCommand(1600),
                         new KickBallCommand(),
-                        new StopLiftingBallCommand(),
-                        new ExtendHardstopCommand(),
-                        new StopIntakeCommand()
+                        new ExtendHardstopCommand()
                 )
         );
     }

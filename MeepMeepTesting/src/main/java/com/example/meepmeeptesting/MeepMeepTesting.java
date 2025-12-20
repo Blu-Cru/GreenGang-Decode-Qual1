@@ -12,15 +12,15 @@ public class MeepMeepTesting {
     }
 
     public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(800);
+        MeepMeep meepMeep = new MeepMeep(700);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 .setConstraints(69, 69, deg(180), deg(180), 17)
                 .build();
 
         myBot.runAction(
-                myBot.getDrive().actionBuilder(new Pose2d(-50, 50, deg(-225)))
-
+                myBot.getDrive().actionBuilder(new Pose2d(-46.5, -51.5, deg(234.0949)))
+                        .waitSeconds(5)
                         .setReversed(true)
                         .setTangent(deg(-45))
                         .splineToSplineHeading(

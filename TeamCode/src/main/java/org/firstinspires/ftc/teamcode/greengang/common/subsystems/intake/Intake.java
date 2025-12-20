@@ -37,6 +37,7 @@ public class Intake implements GreenSubsystem, Subsystem {
         intakeMotor.setPower(0);
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         retractHardstop();
+        in();
     }
 
     public void stop(){
