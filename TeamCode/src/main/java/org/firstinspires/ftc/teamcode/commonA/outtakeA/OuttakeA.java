@@ -123,7 +123,10 @@ public class OuttakeA extends SubsystemBase{
                 m_stop.setPosition(1);
                 break;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 
 >>>>>>> Stashed changes
             case SPIN_UP:
