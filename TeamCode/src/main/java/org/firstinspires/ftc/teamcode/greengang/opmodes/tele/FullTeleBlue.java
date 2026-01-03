@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.commonA.outtakeA.OuttakeA;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Config
-@TeleOp(name = "BlueTele_Command_Sniper", group = "TeleOp")
+@TeleOp(name = "BlueTele2", group = "TeleOp")
 public class FullTeleBlue extends CommandOpMode {
 
     // --- SUBSYSTEMS ---
@@ -28,7 +28,7 @@ public class FullTeleBlue extends CommandOpMode {
 
     // --- AUTO-AIM TARGET ---
     public static double TARGET_X = 11;
-    public static double TARGET_Y = 132;
+    public static double TARGET_Y = 127;
 
     // --- TUNABLES ---
     public static double SNAP_P = 2.05;
@@ -36,6 +36,8 @@ public class FullTeleBlue extends CommandOpMode {
     public static double COEFF_A = 0.045, COEFF_B = 12.5, COEFF_C = 2200.0;
     public static double HOOD_BASE = 0, HOOD_SLOPE = 0.0001;
     public static double VELO_GAIN = 1.15, VOLT_NOMINAL = 13.0;
+    public boolean autoAimToggle=false;
+    public boolean lastX = false;
 
     // --- STATE MACHINE ---
     public enum RobotState {
@@ -100,7 +102,7 @@ public class FullTeleBlue extends CommandOpMode {
         double dx = vGoalX - curX;
         double dy = vGoalY - curY;
         double autoAimRPM = (baseRPM - ((rx * (dx / vDist)) + (ry * (dy / vDist)) * VELO_GAIN)) * (VOLT_NOMINAL / batterySensor.getVoltage());
-        double autoAimHood = Range.clip(HOOD_BASE - (vDist * HOOD_SLOPE), 0.1, 0.6);
+        double autoAimHood = Range.clip(HOOD_BASE - (vDist * HOOD_SLOPE), 0, 0.4);
 
         // 3. State Machine Logic (Inputs)
         if ((gamepad1.left_trigger > 0.1 && gamepad1.right_trigger > 0.1) || (gamepad2.left_trigger > 0.1 && gamepad2.right_trigger > 0.1)) {
@@ -128,7 +130,7 @@ public class FullTeleBlue extends CommandOpMode {
                 outtake.setOuttakeState(OuttakeA.OuttakeState.OFF);
                 break;
             case INTAKE_IN_SHOOT:
-                intake.setIntakeState(IntakeA.IntakeState.INTAKE_IN_SHOOT);
+                intake.setIntakeState(IntakeA.IntakeState.INTAKE_IN);
                 outtake.setOuttakeState(OuttakeA.OuttakeState.SPIN_UP);
                 break;
             case INTAKE_OUT:
@@ -150,7 +152,7 @@ public class FullTeleBlue extends CommandOpMode {
         double strafe = -gamepad1.left_stick_x;
         double turn;
 
-        if (gamepad1.right_trigger > 0.1) {
+        if (autoAimToggle) {
             // Lock Heading
             double targetHeading = Math.atan2(dy, dx);
             double error = targetHeading - curHeading;
@@ -169,14 +171,12 @@ public class FullTeleBlue extends CommandOpMode {
             lastError = 0;
 
             // Manual adjustments
-            if (gamepad1.dpad_left || gamepad2.dpad_left) manualRPM = 1950.0;
-            else if (gamepad1.dpad_right || gamepad2.dpad_right) manualRPM = 2350.0;
+            if (gamepad1.dpad_left || gamepad2.dpad_left) manualRPM -= 5;
+            else if (gamepad1.dpad_right || gamepad2.dpad_right) manualRPM += 5;
 
             if (gamepad1.dpad_down || gamepad2.dpad_down) pos_hood -= 0.001;
             else if (gamepad1.dpad_up || gamepad2.dpad_up) pos_hood += 0.001;
 
-            if (gamepad1.cross || gamepad2.cross) pos_hood = 0.05;
-            if (gamepad1.triangle || gamepad2.triangle) pos_hood = 0.12;
 
             outtake.setTarget_Vel(manualRPM);
             outtake.setHoodPosition(pos_hood);
@@ -186,10 +186,42 @@ public class FullTeleBlue extends CommandOpMode {
         if (gamepad1.share && gamepad1.options) {
             follower.setPose(new Pose(125, 3, 0));
         }
+        if (gamepad1.cross && !lastX) {
+            autoAimToggle = !autoAimToggle;
+            if (autoAimToggle) {
+                double targetHeading = Math.atan2(dy, dx);
+                double error = targetHeading - curHeading;
+                while (error > Math.PI) error -= 2 * Math.PI;
+                while (error < -Math.PI) error += 2 * Math.PI;
 
+                turn = (error * SNAP_P) + ((error - lastError) * SNAP_D);
+                lastError = error;
+
+                // Apply Ballistics automatically
+                outtake.setTarget_Vel(autoAimRPM);
+                outtake.setHoodPosition(autoAimHood);
+            }
+            else {
+                turn = -gamepad1.right_stick_x;
+                lastError = 0;
+
+                // Manual adjustments
+                if (gamepad1.dpad_left || gamepad2.dpad_left) manualRPM -= 5;
+                else if (gamepad1.dpad_right || gamepad2.dpad_right) manualRPM += 5;
+
+                if (gamepad1.dpad_down || gamepad2.dpad_down) pos_hood -= 0.001;
+                else if (gamepad1.dpad_up || gamepad2.dpad_up) pos_hood += 0.001;
+
+
+                outtake.setTarget_Vel(manualRPM);
+                outtake.setHoodPosition(pos_hood);
+            }
+
+        }
+        lastX = gamepad1.cross;
         // 5. Telemetry
         telemetry.addData("State", currentState);
-        telemetry.addData("Lock", gamepad1.right_trigger > 0.1 ? "ON" : "OFF");
+        telemetry.addData("Lock", autoAimToggle ? "ON" : "OFF");
         telemetry.addData("Dist", "%.2f", vDist);
         telemetry.addData("X/Y", "%.1f, %.1f", curX, curY);
         telemetry.addData("Flywheel Velocity", outtake.getFlyVel());

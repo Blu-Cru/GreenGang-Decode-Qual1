@@ -20,7 +20,7 @@ public class IntakeA extends SubsystemBase {
     private final double SPIT_POWER = -1.0; // Use negative for reverse direction
     public IntakeA(HardwareMap hardwareMap) {
         intake = hardwareMap.get(DcMotorEx.class, "intake");
-        lift = hardwareMap.get(CRServo.class, "lift");
+
 
 
     }
@@ -37,45 +37,22 @@ public class IntakeA extends SubsystemBase {
         switch (intake_state) {
             case IDLE:
                 intake.setPower(0);
-                lift.setPower(0);
+
 
                 break;
             case INTAKE_IN:
                 intake.setPower(1);
-                lift.setPower(1);
+
 
                 break;
             case INTAKE_OUT:
                 intake.setPower(-1);
-                lift.setPower(-1);
+
 
                 break;
-            case INTAKE_IN_SHOOT:
-                intake.setPower(1);
-                lift.setPower(1);
 
         }
     }
-    /*public void intake_in() {
-        intake.setPower(1);
-        lift.setPower(1);
-        stop.setPosition(1);
-    }
-    public void intake_out() {
-        intake.setPower(-1);
-        lift.setPower(-1);
-        stop.setPosition(0);
-    }
-    public void intake_in_shoot() {
-        intake.setPower(1);
-        lift.setPower(1);
-        stop.setPosition(0);
-    }
-    public void intake_idle() {
-        intake.setPower(0);
-        lift.setPower(0);
-        stop.setPosition(0);
-    }*/
 
 }
 
