@@ -33,8 +33,8 @@ public class FullTeleBlue extends CommandOpMode {
     // --- TUNABLES ---
     public static double SNAP_P = 2.05;
     public static double SNAP_D = 1.88;
-    public static double COEFF_A = 0.045, COEFF_B = 12.5, COEFF_C = 1600.0;
-    public static double HOOD_BASE = 0.1, HOOD_SLOPE = 0.00001;
+    public static double COEFF_A = 0.045, COEFF_B = 12.5, COEFF_C = 2200.0;
+    public static double HOOD_BASE = 0, HOOD_SLOPE = 0.0001;
     public static double VELO_GAIN = 1.15, VOLT_NOMINAL = 13.0;
 
     // --- STATE MACHINE ---
@@ -129,7 +129,7 @@ public class FullTeleBlue extends CommandOpMode {
                 break;
             case INTAKE_IN_SHOOT:
                 intake.setIntakeState(IntakeA.IntakeState.INTAKE_IN_SHOOT);
-                outtake.setOuttakeState(OuttakeA.OuttakeState.REV);
+                outtake.setOuttakeState(OuttakeA.OuttakeState.SPIN_UP);
                 break;
             case INTAKE_OUT:
                 intake.setIntakeState(IntakeA.IntakeState.INTAKE_OUT);
@@ -192,6 +192,7 @@ public class FullTeleBlue extends CommandOpMode {
         telemetry.addData("Lock", gamepad1.right_trigger > 0.1 ? "ON" : "OFF");
         telemetry.addData("Dist", "%.2f", vDist);
         telemetry.addData("X/Y", "%.1f, %.1f", curX, curY);
+        telemetry.addData("Flywheel Velocity", outtake.getFlyVel());
         telemetry.update();
     }
 }

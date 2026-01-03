@@ -18,7 +18,8 @@ public class OuttakeA extends SubsystemBase {
         OFF,
         REVERSE,
         FIRE,
-        REV
+        REV,
+        SPIN_UP
     }
 
     private OuttakeState m_currentState = OuttakeState.OFF;
@@ -38,8 +39,8 @@ public class OuttakeA extends SubsystemBase {
         m_kicker = hardwareMap.get(Servo.class, "kicker");
         m_hood = hardwareMap.get(Servo.class, "hood");
         m_stop = hardwareMap.get(Servo.class, "hardstop");
-
-        //m_flywheel2.setDirection(DcMotorSimple.Direction.REVERSE);
+        /*m_flywheel1.setDirection(DcMotorSimple.Direction.REVERSE);
+        m_flywheel2.setDirection(DcMotorSimple.Direction.REVERSE);*/
         controller = new PIDController(kP, kI, kD);
 
         setOuttakeState(OuttakeState.OFF);
@@ -109,6 +110,16 @@ public class OuttakeA extends SubsystemBase {
                 m_flywheel2.setPower(power3);
                 m_kicker.setPosition(KICKER_RETRACTED_POS);
                 m_stop.setPosition(1);
+
+            case SPIN_UP:
+                double power4 = 0;
+                double velocity4 = getFlyVel();
+                target = target_Vel;
+                power4 = controller.calculate(velocity4, target) + ff  * target;
+                m_flywheel1.setPower(power4);
+                m_flywheel2.setPower(power4);
+                m_kicker.setPosition(KICKER_RETRACTED_POS);
+                m_stop.setPosition(0);
         }
     }
 }
