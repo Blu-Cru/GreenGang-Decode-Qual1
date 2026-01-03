@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class OuttakeA extends SubsystemBase {
+public class OuttakeA extends SubsystemBase{
 
     private final DcMotorEx m_flywheel1, m_flywheel2;
     private final Servo m_kicker;
@@ -45,7 +45,17 @@ public class OuttakeA extends SubsystemBase {
 
         setOuttakeState(OuttakeState.OFF);
         m_hood.setPosition(0);
+
+
+        m_flywheel1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        m_flywheel1.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+
+
+        m_flywheel2.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        m_flywheel2.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
     }
+
+
 
     public void setOuttakeState(OuttakeState newState) {
         m_currentState = newState;
@@ -71,55 +81,53 @@ public class OuttakeA extends SubsystemBase {
         return m_flywheel1.getVelocity();
     }
 
+    public void setMotorPower(double power){
+        m_flywheel1.setPower(power);
+        m_flywheel2.setPower(power);
+    }
+
+    public void runFlywheelPID(){
+        double power = 0;
+
+        target = target_Vel;
+        power = controller.calculate(getFlyVel(), target) + ff  * target;
+
+        setMotorPower(power);
+    }
+
     @Override
     public void periodic() {
         switch (m_currentState) {
             case OFF:
-                m_flywheel1.setPower(0.0);
-                m_flywheel1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-                m_flywheel1.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-                m_flywheel2.setPower(0.0);
-                m_flywheel2.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-                m_flywheel2.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+                setMotorPower(0);
+
                 m_kicker.setPosition(KICKER_RETRACTED_POS);
                 m_stop.setPosition(1);
                 break;
             case REVERSE:
-                m_flywheel1.setPower(REVERSE_POWER);
-                m_flywheel2.setPower(REVERSE_POWER);
+                setMotorPower(REVERSE_POWER);
+
                 m_kicker.setPosition(KICKER_RETRACTED_POS);
                 m_stop.setPosition(0);
                 break;
             case FIRE:
-                double power2 = 0;
-                double velocity2 = getFlyVel();
-                target = target_Vel;
-                power2 = controller.calculate(velocity2, target) + ff  * target;
-                m_flywheel1.setPower(power2);
-                m_flywheel2.setPower(power2);
+                runFlywheelPID();
 
                 m_kicker.setPosition(KICKER_FIRE_POS);
                 m_stop.setPosition(0);
                 break;
             case REV:
-                double power3 = 0;
-                double velocity3 = getFlyVel();
-                target = target_Vel;
-                power3 = controller.calculate(velocity3, target) + ff  * target;
-                m_flywheel1.setPower(power3);
-                m_flywheel2.setPower(power3);
+                runFlywheelPID();
+
                 m_kicker.setPosition(KICKER_RETRACTED_POS);
                 m_stop.setPosition(1);
-
+                break;
             case SPIN_UP:
-                double power4 = 0;
-                double velocity4 = getFlyVel();
-                target = target_Vel;
-                power4 = controller.calculate(velocity4, target) + ff  * target;
-                m_flywheel1.setPower(power4);
-                m_flywheel2.setPower(power4);
+                runFlywheelPID();
+
                 m_kicker.setPosition(KICKER_RETRACTED_POS);
                 m_stop.setPosition(0);
+                break;
         }
     }
 }
