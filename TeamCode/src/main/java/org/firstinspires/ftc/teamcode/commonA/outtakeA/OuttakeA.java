@@ -100,7 +100,7 @@ public class OuttakeA extends SubsystemBase{
     public void periodic() {
         switch (m_currentState) {
             case OFF:
-                setTarget_Vel(0);
+                setMotorPower(  0);
 
                 m_kicker.setPosition(KICKER_RETRACTED_POS);
                 m_stop.setPosition(1);
@@ -119,17 +119,10 @@ public class OuttakeA extends SubsystemBase{
                 m_kicker.setPosition(KICKER_RETRACTED_POS);
                 m_stop.setPosition(1);
                 break;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> Stashed changes
-
->>>>>>> Stashed changes
             case SPIN_UP:
 
                 m_kicker.setPosition(KICKER_RETRACTED_POS);
-                m_stop.setPosition(0);
+//                m_stop.setPosition(0);
                 break;
         }
 
