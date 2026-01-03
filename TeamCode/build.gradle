@@ -1,15 +1,6 @@
 //
 // build.gradle in TeamCode
 //
-// Most of the definitions for building your module reside in a common, shared
-// file 'build.common.gradle'. Being factored in this way makes it easier to
-// integrate updates to the FTC into your code. If you really need to customize
-// the build definitions, you can place those customizations in this file, but
-// please think carefully as to whether such customizations are really necessary
-// before doing so.
-
-
-// Custom definitions may go here
 
 // Include common definitions from above.
 apply from: '../build.common.gradle'
@@ -18,25 +9,67 @@ apply from: '../build.dependencies.gradle'
 android {
     namespace = 'org.firstinspires.ftc.teamcode'
 
+    defaultConfig {
+        // Ensure targetSdkVersion is 34 in your build.common.gradle
+        minSdkVersion 24
+    }
+
     packagingOptions {
         jniLibs.useLegacyPackaging true
+
+        // Resolves "Multiple files found" errors for common shared libraries
+        pickFirst 'META-INF/INDEX.LIST'
+        pickFirst 'META-INF/io.netty.versions.properties'
+        pickFirst 'META-INF/ASL2.0'
+        pickFirst 'org/apache/commons/codec/language/bm/*.txt'
+
+        // Excludes duplicate license files that stop the build
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
     }
 }
 
 repositories {
-    maven {
-        url = 'https://maven.brott.dev/'
-    }
+    mavenCentral() // Required for Road Runner 1.0.1 core and actions
+    google()
+    maven { url = 'https://maven.brott.dev/' } // Required for Road Runner 0.1.25 ftc
     maven { url = 'https://jitpack.io' }
+    maven { url = "https://mymaven.bylazar.com/releases" } // Required for Pedro Pathing
+}
+
+configurations.all {
+    resolutionStrategy {
+        // Forces all libraries to align on these specific versions to avoid "Duplicate Class"
+        force 'com.acmerobotics.roadrunner:core:1.0.1'
+        force 'com.acmerobotics.dashboard:dashboard:0.5.1'
+        force 'androidx.appcompat:appcompat:1.2.0'
+    }
 }
 
 dependencies {
     implementation project(':FtcRobotController')
 
+    // --- ROAD RUNNER 1.0.x STACK ---
+    // Note: The 'ftc' bridge is version 0.1.25, while math/logic is 1.0.1
     implementation "com.acmerobotics.roadrunner:ftc:0.1.25"
     implementation "com.acmerobotics.roadrunner:core:1.0.1"
     implementation "com.acmerobotics.roadrunner:actions:1.0.1"
+
+    // --- DASHBOARD ---
     implementation "com.acmerobotics.dashboard:dashboard:0.5.1"
+
+    // --- OTHER LIBRARIES ---
     implementation 'com.github.StateFactory-Dev:StateFactory:0.3.9'
     implementation 'org.ftclib.ftclib:core:2.1.1'
+
+    // --- PEDRO PATHING 2.0.4 ---
+    // Aggressive exclusions prevent Pedro from bringing in conflicting SDK or RR files
+    implementation ('com.pedropathing:ftc:2.0.4') {
+        exclude group: 'androidx.appcompat'
+        exclude group: 'org.firstinspires.ftc'
+        exclude group: 'com.acmerobotics.roadrunner'
+    }
 }

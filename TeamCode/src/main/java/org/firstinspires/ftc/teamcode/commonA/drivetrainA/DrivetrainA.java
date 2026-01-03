@@ -39,6 +39,33 @@ public class DrivetrainA {
         imu.initialize(parameters);
     }
 
+    public void drive(double drive, double strafe, double turn, boolean yn) {
+        if (yn) {
+            drive=Math.pow(drive, 3);
+            strafe=Math.pow(strafe, 3);
+            turn=Math.pow(turn, 3);
+        }
+
+        double frontLeftPower = drive + strafe + turn;
+        double frontRightPower = drive - strafe - turn;
+        double backLeftPower = drive - strafe + turn;
+        double backRightPower = drive + strafe - turn;
+        double max = Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower));
+        max = Math.max(max, Math.abs(backLeftPower));
+        max = Math.max(max, Math.abs(backRightPower));
+
+        if (max > 1.0) {
+            frontLeftPower /= max;
+            frontRightPower /= max;
+            backLeftPower /= max;
+            backRightPower /= max;
+        }
+        FrontLeft.setPower(frontLeftPower);
+        FrontRight.setPower(frontRightPower);
+        BackLeft.setPower(backLeftPower);
+        BackRight.setPower(backRightPower);
+    }
+
 
     public void RCdrive(Gamepad gamepad1, boolean yn) {
         double axial = -gamepad1.left_stick_y; // Note: pushing stick forward gives negative value

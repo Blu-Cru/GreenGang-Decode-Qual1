@@ -1,9 +1,8 @@
-package org.firstinspires.ftc.teamcode.greengang.opmodes.auto.Blue;
+package org.firstinspires.ftc.teamcode.greengang.opmodes.auto.Red;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.arcrobotics.ftclib.command.Command;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -14,7 +13,6 @@ import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.StopIntakeCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.MoveKickerDownCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.StartFlywheelCommand;
-import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.StopLiftingBallCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.StopShooterCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.intake.IntakeCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.shoot.ShootCommand;
@@ -23,7 +21,7 @@ import org.firstinspires.ftc.teamcode.greengang.common.util.Robot;
 import org.firstinspires.ftc.teamcode.greengang.opmodes.GreenLinearOpMode;
 
 @Autonomous(group = "auto")
-public class TwelveBallAutoBlue extends GreenLinearOpMode {
+public class TwelveBallAutoRed extends GreenLinearOpMode {
 
     private Action path;
 
@@ -32,12 +30,12 @@ public class TwelveBallAutoBlue extends GreenLinearOpMode {
     }
 
     CommandToAction startFlywheel =
-        new CommandToAction(
-            new SequentialCommandGroup(
-                    new StartFlywheelCommand(),
-                    new RetractHardstopCommand()
-            )
-        );
+            new CommandToAction(
+                    new SequentialCommandGroup(
+                            new StartFlywheelCommand(),
+                            new RetractHardstopCommand()
+                    )
+            );
 
     CommandToAction intake =
             new CommandToAction(
@@ -60,16 +58,16 @@ public class TwelveBallAutoBlue extends GreenLinearOpMode {
         addKicker();
         addIntake();
 
-        Pose2d startPose = new Pose2d(-50, -50, deg(225));
+        // Reflected start pose
+        Pose2d startPose = new Pose2d(-50, 50, deg(-225));
         drivetrain.drive.localizer.setPose(startPose);
 
         path = drivetrain.drive.actionBuilder(startPose)
-
                 .setReversed(true)
-                .setTangent(deg(45))
+                .setTangent(deg(-45))
                 .splineToSplineHeading(
-                        new Pose2d(-24, -24, deg(225)),
-                        deg(45)
+                        new Pose2d(-24, 24, deg(-225)),
+                        deg(-45)
                 )
 
                 // shoot
@@ -83,18 +81,18 @@ public class TwelveBallAutoBlue extends GreenLinearOpMode {
                 .setReversed(false)
                 .setTangent(deg(0))
                 .splineToSplineHeading(
-                        new Pose2d(-12, -30, deg(-90)),
-                        deg(-90)
+                        new Pose2d(-12, 30, deg(90)),
+                        deg(90)
                 )
 
                 // intake
-                .lineToY(-50)
+                .lineToY(50)
 
                 .setReversed(true)
-                .setTangent(deg(112))
+                .setTangent(deg(-112))
                 .splineToSplineHeading(
-                        new Pose2d(-24, -24, deg(225)),
-                        deg(112)
+                        new Pose2d(-24, 24, deg(-225)),
+                        deg(-112)
                 )
 
                 // shoot
@@ -105,18 +103,18 @@ public class TwelveBallAutoBlue extends GreenLinearOpMode {
                 .setReversed(false)
                 .setTangent(deg(0))
                 .splineToSplineHeading(
-                        new Pose2d(14, -35, deg(-90)),
-                        deg(-90)
+                        new Pose2d(14, 35, deg(90)),
+                        deg(90)
                 )
 
                 // intake
-                .lineToY(-55)
+                .lineToY(55)
 
                 .setReversed(true)
-                .setTangent(deg(60))
+                .setTangent(deg(-60))
                 .splineToSplineHeading(
-                        new Pose2d(-24, -24, deg(225)),
-                        deg(139)
+                        new Pose2d(-24, 24, deg(-225)),
+                        deg(-139)
                 )
 
                 .stopAndAdd(new CommandToAction(
@@ -126,17 +124,17 @@ public class TwelveBallAutoBlue extends GreenLinearOpMode {
                 .setReversed(false)
                 .setTangent(deg(0))
                 .splineToSplineHeading(
-                        new Pose2d(36, -40, deg(-90)),
-                        deg(-90)
+                        new Pose2d(36, 40, deg(90)),
+                        deg(90)
                 )
 
-                .lineToY(-55)
+                .lineToY(55)
 
                 .setReversed(true)
-                .setTangent(deg(130))
+                .setTangent(deg(-130))
                 .splineToSplineHeading(
-                        new Pose2d(-24, -24, deg(225)),
-                        deg(153)
+                        new Pose2d(-24, 24, deg(-225)),
+                        deg(-153)
                 )
 
                 // shoot
@@ -144,7 +142,7 @@ public class TwelveBallAutoBlue extends GreenLinearOpMode {
                         new ShootCommand()
                 ))
 
-                //kill
+                // kill
                 .stopAndAdd(
                         new CommandToAction(
                                 new SequentialCommandGroup(

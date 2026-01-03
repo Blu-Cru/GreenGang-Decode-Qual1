@@ -1,20 +1,25 @@
+/*
 package org.firstinspires.ftc.teamcode.greengang.opmodes.tele;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.commonA.drivetrainA.DrivetrainA;
 import org.firstinspires.ftc.teamcode.commonA.intakeA.IntakeA;
 import org.firstinspires.ftc.teamcode.commonA.outtakeA.OuttakeA;
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@TeleOp(name = "RCSMTeleOp")
-public class RCSMTeleOp extends CommandOpMode {
+@TeleOp(name = "BlueTeleOp")
+public class BlueTele extends CommandOpMode {
 
     // 1. Define Subsystems
     private IntakeA intake;
     private OuttakeA outtake; // Replaces raw flywheel, kicker, hood variables
     private DrivetrainA drivetrain;
+
 
     // 2. Define States
     public enum RobotState {
@@ -32,18 +37,21 @@ public class RCSMTeleOp extends CommandOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     // Hood position is still stored here because it's manually adjustable
     private double pos_hood=0;
-
+    private Follower follower;
     @Override
     public void initialize() {
         // --- HARDWARE INIT ---
         intake = new IntakeA(hardwareMap);
-        drivetrain = new DrivetrainA(hardwareMap);
+
 
 
         // Initialize Outtake Subsystem
         outtake = new OuttakeA(hardwareMap);
-
+        follower = Constants.createFollower(hardwareMap);
+        follower.setPose(new Pose(45, 120, Math.toRadians(180)));
+        drivetrain = new DrivetrainA(hardwareMap);
         telemetry.addData("Status", "Initialized");
+
         telemetry.update();
     }
 
@@ -127,7 +135,7 @@ public class RCSMTeleOp extends CommandOpMode {
         else if (gamepad1.dpad_up || gamepad2.dpad_up) pos_hood += 0.001;
 
         if (gamepad1.cross || gamepad2.cross) pos_hood = 0.05;
-        if (gamepad1.triangle || gamepad2.cross) pos_hood = 0.12;
+        if (gamepad1.triangle || gamepad2.triangle) pos_hood = 0.12;
         if (gamepad1.dpad_left || gamepad2.dpad_left) {
             double v = 1950.0;
             outtake.setTarget_Vel(v);
@@ -138,13 +146,17 @@ public class RCSMTeleOp extends CommandOpMode {
         }
 
         outtake.setHoodPosition(pos_hood); // Call the hood setter in the subsystem
-
+        follower.update();
         // Telemetry
         telemetry.addData("Robot State", currentState);
         telemetry.addData("Outtake State", outtake.getOuttakeState()); // Check flywheel state
         telemetry.addData("Intake State", intake.getIntakeState());
         telemetry.addData("hood_pos", outtake.getHoodPos());
         telemetry.addData("fly_pow", outtake.getFlyVel());
+        telemetry.addData("X", follower.getPose().getX());
+        telemetry.addData("Y", follower.getPose().getY());
+        telemetry.addData("Heading", follower.getPose().getHeading());
         telemetry.update();
     }
 }
+*/
