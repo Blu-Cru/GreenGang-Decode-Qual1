@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.greengang.opmodes.tele;
 import static org.firstinspires.ftc.teamcode.greengang.common.subsystems.shooter.ShooterData.velocityFromDistance;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.controller.PDController;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
@@ -12,8 +13,19 @@ import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.commonA.intakeA.IntakeA;
-import org.firstinspires.ftc.teamcode.commonA.outtakeA.ShooterA;
+import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.ExtendHardstopCommand;
+import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.StartIntakeCommand;
+import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.StopIntakeCommand;
+import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.MoveKickerUpCommand;
+import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.SetFlywheelVelocityCommand;
+import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.spit.SpitCommand;
+import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.StopShooterCommand;
+import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.SwitchFlywheelStateCommand;
+import org.firstinspires.ftc.teamcode.greengang.common.commands.shoot.KickBallCommand;
+import org.firstinspires.ftc.teamcode.greengang.common.subsystems.shooter.Shooter;
+import org.firstinspires.ftc.teamcode.greengang.common.util.Alliance;
+import org.firstinspires.ftc.teamcode.greengang.common.util.Globals;
+import org.firstinspires.ftc.teamcode.greengang.common.util.StickyGamepad;
 import org.firstinspires.ftc.teamcode.greengang.opmodes.GreenLinearOpMode;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
@@ -25,8 +37,11 @@ public class Tele extends GreenLinearOpMode {
     
     //private VoltageSensor batterySensor;
 
-    public static double TARGET_X = 11;
-    public static double TARGET_Y = 127;
+    public static double TARGET_BLUE_X = 11;
+    public static double TARGET_BLUE_Y = 127;
+
+    public static double TARGET_RED_X = 11;
+    public static double TARGET_RED_Y = -127;
 
     public static double headingP = 2.05;
     public static double headingD = 1.88;
@@ -36,12 +51,14 @@ public class Tele extends GreenLinearOpMode {
 //    public static double VELO_GAIN = 1.15, VOLT_NOMINAL = 13.0;
     
     public boolean autoAimToggle = false;
+    public double targetDistance = 0;
+    public double autoAimTargetVelocity = 0;
 
     public enum State {
         START,
-        IN, 
+        INTAKE,
         SPIT, 
-        OUTTAKE, 
+        SPINUP,
         SHOOT
     }
     StateMachine sm;
@@ -78,7 +95,7 @@ public class Tele extends GreenLinearOpMode {
     @Override
     public void initialize() {
         addDrivetrain();
-        addShooterA();
+        addShooter();
         addStickyG1();
         addStickyG2();
         addKicker();
@@ -98,120 +115,94 @@ public class Tele extends GreenLinearOpMode {
         sm = new StateMachineBuilder()
 
                 .state(State.START)
-
-                .transition(this::bothTriggers, State.IN)
+                .onEnter(() -> {
+                    new StopIntakeCommand().schedule();
+                    new StopShooterCommand().schedule();
+                })
                 .transition(this::shootButtons, State.SHOOT)
-                .transition(this::rightTrigger, State.OUTTAKE)
-                .transition(this::leftTrigger, State.IN)
+                .transition(this::bothTriggers, State.INTAKE)
+                .transition(this::rightTrigger, State.SPINUP)
+                .transition(this::leftTrigger, State.INTAKE)
                 .transition(() -> gamepad1.x, State.SPIT)
 
-                .loop(() -> {
-
+                .state(State.INTAKE)
+                .onEnter(() -> {
+                    new StartIntakeCommand().schedule();
+                    new StopShooterCommand().schedule();
                 })
-
-                .state(State.IN)
-
-                .transition(this::bothTriggers, State.IN)
                 .transition(this::shootButtons, State.SHOOT)
-                .transition(this::rightTrigger, State.OUTTAKE)
-                .transition(this::leftTrigger, State.IN)
-                .transition(() -> gamepad1.x, State.SPIT)
-                .transition(this::noInput, State.START)
-
-                .loop(() -> {
-
-                })
-
-                .state(State.OUTTAKE)
-
-                .transition(this::bothTriggers, State.IN)
-                .transition(this::shootButtons, State.SHOOT)
-                .transition(this::rightTrigger, State.OUTTAKE)
-                .transition(this::leftTrigger, State.IN)
+                .transition(this::rightTrigger, State.SPINUP)
                 .transition(() -> gamepad1.x, State.SPIT)
                 .transition(this::noInput, State.START)
 
-                .loop(() -> {
-
+                .state(State.SPINUP)
+                .onEnter(() -> {
+                    new StopIntakeCommand().schedule();
                 })
+                .loop(() -> {
+                    if(autoAimToggle){
+                        sh.setTargetVelocity(autoAimTargetVelocity);
+                    } else {
+                        sh.setTargetVelocity(manualRPM);
+                    }
+                })
+                .transition(this::shootButtons, State.SHOOT)
+                .transition(this::bothTriggers, State.INTAKE)
+                .transition(this::leftTrigger, State.INTAKE)
+                .transition(() -> gamepad1.x, State.SPIT)
+                .transition(this::noInput, State.START)
 
                 .state(State.SHOOT)
+                .onEnter(() -> {
+                    new StartIntakeCommand().schedule();
+                })
+                .loop(() -> {
+                    if(autoAimToggle){
+                        sh.setTargetVelocity(autoAimTargetVelocity);
+                    } else {
+                        sh.setTargetVelocity(manualRPM);
+                    }
+                })
 
-                .transition(this::bothTriggers, State.IN)
-                .transition(this::shootButtons, State.SHOOT)
-                .transition(this::rightTrigger, State.OUTTAKE)
-                .transition(this::leftTrigger, State.IN)
+                .transition(this::bothTriggers, State.INTAKE)
+                .transition(this::rightTrigger, State.SPINUP)
+                .transition(this::leftTrigger, State.INTAKE)
                 .transition(() -> gamepad1.x, State.SPIT)
                 .transition(this::noInput, State.START)
-
-                .loop(() -> {
-
-                })
 
                 .state(State.SPIT)
-
-                .transition(this::bothTriggers, State.IN)
-                .transition(this::shootButtons, State.SHOOT)
-                .transition(this::rightTrigger, State.OUTTAKE)
-                .transition(this::leftTrigger, State.IN)
-                .transition(() -> gamepad1.x, State.SPIT)
-                .transition(this::noInput, State.START)
-
-                .loop(() -> {
-
+                .onEnter(() -> {
+                    sh.setShooterState(Shooter.State.REVERSE);
+                    new SpitCommand().schedule();
                 })
-
+                .transition(this::shootButtons, State.SHOOT)
+                .transition(this::bothTriggers, State.INTAKE)
+                .transition(this::rightTrigger, State.SPINUP)
+                .transition(this::leftTrigger, State.INTAKE)
+                .transition(this::noInput, State.START)
                 .build();
 
         sm.setState(State.START);
         sm.start();
-
-
     }
 
     @Override
     public void periodic() {
-
         follower.update();
-        Pose currPose = follower.getPose();
 
-        double curX = currPose.getX();
-        double curY = currPose.getY();
-        double curHeading = currPose.getHeading();
+        double dx, dy;
 
-        double dx = TARGET_X - curX;
-        double dy = TARGET_Y - curY;
-
-        double vDist = Math.hypot(dx, dy);
-
-        double autoAimTargetVelocity = velocityFromDistance(vDist);
-
-        switch (state) {
-            case START:
-                intake.setState(IntakeA.State.START);
-                outtake.setState(ShooterA.State.START);
-                break;
-            case IN:
-                intake.setState(IntakeA.State.IN);
-                outtake.setState(ShooterA.State.START);
-                break;
-//            case IN:
-//                intake.setState(IntakeA.State.IN);
-//                outtake.setState(ShooterA.State.SPIN_UP);
-//                break;
-            case SPIT:
-                intake.setState(IntakeA.State.SPIT);
-                outtake.setState(ShooterA.State.REVERSE);
-                break;
-            case OUTTAKE:
-                intake.setState(IntakeA.State.START);
-                outtake.setState(ShooterA.State.REV);
-                break;
-            case SHOOT:
-                intake.setState(IntakeA.State.START);
-                outtake.setState(ShooterA.State.FIRE);
-                break;
+        if(Globals.alliance == Alliance.BLUE) {
+            dx = TARGET_BLUE_X - drivetrain.pose.position.x;
+            dy = TARGET_BLUE_Y - drivetrain.pose.position.y;
+        } else {
+            dx = TARGET_RED_X - drivetrain.pose.position.x;
+            dy = TARGET_RED_Y - drivetrain.pose.position.y;
         }
+
+        targetDistance = Math.hypot(dx, dy);
+
+        autoAimTargetVelocity = velocityFromDistance(targetDistance);
 
         //auto aim and drive
         double drive = -gamepad1.left_stick_y;
@@ -220,13 +211,12 @@ public class Tele extends GreenLinearOpMode {
 
         if (autoAimToggle) {
             double targetHeading = Math.atan2(dy, dx);
-            double error = targetHeading - curHeading;
+            double error = targetHeading - drivetrain.heading;
 
             //clamp between -pi and pi
             error = Math.atan2(Math.sin(error), Math.cos(error));
 
             turn = headingPD.calculate(error);
-            shooterA.setTargetVelocity(autoAimTargetVelocity);
         } else {
             turn = -gamepad1.right_stick_x;
 
@@ -234,22 +224,22 @@ public class Tele extends GreenLinearOpMode {
 
             if (gamepad1.dpad_left || gamepad2.dpad_left) manualRPM -= 5;
             else if (gamepad1.dpad_right || gamepad2.dpad_right) manualRPM += 5;
-
-            shooterA.setTargetVelocity(manualRPM);
         }
 
         drivetrain.drive(drive, -strafe, -turn, true);
 
-        telemetry.addData("State", state);
-        telemetry.addData("Lock", autoAimToggle ? "ON" : "START");
-        telemetry.addData("Dist", "%.2f", vDist);
-        telemetry.addData("X/Y", "%.1f, %.1f", curX, curY);
-        telemetry.addData("Flywheel Velocity", shooterA.getFlywheelVelocity());
-        telemetry.update();
+
+        if(stickyG1.a){
+            new KickBallCommand().schedule();
+        }
     }
 
     @Override
     public void telemetry(Telemetry tele) {
-
+        tele.addData("State", state);
+        tele.addData("Lock", autoAimToggle ? "ON" : "START");
+        tele.addData("Target Distance", targetDistance);
+        tele.addData("X,Y", drivetrain.pose.position.x + "," + drivetrain.pose.position.y);
+        tele.addData("Flywheel Velocity", shooterA.getFlywheelVelocity());
     }
 }

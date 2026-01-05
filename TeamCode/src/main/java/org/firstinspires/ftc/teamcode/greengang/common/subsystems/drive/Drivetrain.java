@@ -1,7 +1,11 @@
-package org.firstinspires.ftc.teamcode.commonA.drivetrainA;
+package org.firstinspires.ftc.teamcode.greengang.common.subsystems.drive;
+
+import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.arcrobotics.ftclib.command.Subsystem;
+import com.pedropathing.geometry.PedroCoordinates;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -9,7 +13,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.greengang.common.subsystems.drive.PinpointLocalizer;
 import org.firstinspires.ftc.teamcode.greengang.common.util.GreenSubsystem;
 import org.firstinspires.ftc.teamcode.greengang.common.util.Globals;
 
@@ -96,8 +99,7 @@ public class Drivetrain implements GreenSubsystem, Subsystem {
 
     @Override
     public void update() {
-        pinpoint.update();
-        pose = pinpoint.getPose();
+        pose = new Pose2d(follower.getPose().getX(), follower.getPose().getY(), follower.getPose().getHeading());
         heading = pose.heading.toDouble();
     }
 

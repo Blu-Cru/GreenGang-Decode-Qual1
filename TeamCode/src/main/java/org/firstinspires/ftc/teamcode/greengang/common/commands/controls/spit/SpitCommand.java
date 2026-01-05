@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.greengang.common.commands.controls.outtake;
+package org.firstinspires.ftc.teamcode.greengang.common.commands.controls.spit;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 
 import org.firstinspires.ftc.teamcode.greengang.common.util.Robot;
 
-public class OuttakeCommand extends InstantCommand {
-    public OuttakeCommand() {
+public class SpitCommand extends InstantCommand {
+    public SpitCommand() {
         super(
                 () -> {
                     Robot.getInstance().intake.spit();

@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.commonA.drivetrainA.Drivetrain;
+import org.firstinspires.ftc.teamcode.greengang.common.subsystems.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.commonA.outtakeA.ShooterA;
 import org.firstinspires.ftc.teamcode.greengang.common.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.greengang.common.subsystems.shooter.Kicker;
@@ -17,7 +17,6 @@ import org.firstinspires.ftc.teamcode.greengang.common.subsystems.drive.Drive;
 import org.firstinspires.ftc.teamcode.greengang.common.util.StickyGamepad;
 import org.firstinspires.ftc.teamcode.greengang.common.util.Globals;
 import org.firstinspires.ftc.teamcode.greengang.common.util.Robot;
-import org.firstinspires.ftc.teamcode.greengang.common.subsystems.drive.DrivetrainOLD;
 
 public abstract class GreenLinearOpMode extends LinearOpMode {
 

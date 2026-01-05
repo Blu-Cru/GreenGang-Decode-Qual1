@@ -3,9 +3,8 @@ package org.firstinspires.ftc.teamcode.greengang.common.util;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.commonA.drivetrainA.Drivetrain;
+import org.firstinspires.ftc.teamcode.greengang.common.subsystems.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.commonA.outtakeA.ShooterA;
-import org.firstinspires.ftc.teamcode.greengang.common.subsystems.drive.DrivetrainOLD;
 import org.firstinspires.ftc.teamcode.greengang.common.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.greengang.common.subsystems.shooter.Kicker;
 import org.firstinspires.ftc.teamcode.greengang.common.subsystems.shooter.Shooter;

@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.commonA.drivetrainA.Drivetrain;
+import org.firstinspires.ftc.teamcode.greengang.common.subsystems.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.commonA.outtakeA.OuttakeA;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 

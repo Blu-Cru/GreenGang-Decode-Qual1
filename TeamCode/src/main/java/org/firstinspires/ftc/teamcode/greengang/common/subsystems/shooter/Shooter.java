@@ -20,26 +20,27 @@ public class Shooter implements GreenSubsystem, Subsystem {
     public static double target, velocity = 0;
 
     //tune these
-    public static double DEFAULT_VELOCITY = 2100;
-    public static double DEFAULT_HOOD_POSITION = 0.083;
+    public static double DEFAULT_VELOCITY = 2200;
+    public static double DEFAULT_HOOD_POSITION = 0;
 
     public enum State {
         IDLE,
         AUTO,
         MANUAL,
+        REVERSE,
     }
 
     public State state;
 
-    DcMotorEx flywheel;
+    DcMotorEx flywheel1;
+    DcMotorEx flywheel2;
     PIDController controller;
-    AprilTagTargeting targeting;
     Servo hoodServo;
 
-    public boolean started = false;
-
     public Shooter(HardwareMap hardwareMap){
-        flywheel = hardwareMap.get(DcMotorEx.class, "flywheel");
+        flywheel1 = hardwareMap.get(DcMotorEx.class, "flywheel1");
+        flywheel2 = hardwareMap.get(DcMotorEx.class, "flywheel2");
+
         hoodServo = hardwareMap.get(Servo.class, "hood");
 
         controller = new PIDController(kP, kI, kD);
@@ -49,18 +50,18 @@ public class Shooter implements GreenSubsystem, Subsystem {
 
     @Override
     public void init(){
-        flywheel.setPower(0);
+        flywheel1.setPower(0);
+        flywheel2.setPower(0);
 
-        flywheel.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        flywheel.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        flywheel.setDirection(DcMotorSimple.Direction.REVERSE);
+        flywheel1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        flywheel1.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+
+        flywheel2.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        flywheel2.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
         hoodServo.setPosition(DEFAULT_HOOD_POSITION);
     }
 
-    public void setTargeting(AprilTagTargeting targeting) {
-        this.targeting = targeting;
-    }
 
     public void setTargetVelocity(double t){
         state = State.AUTO;
@@ -71,18 +72,8 @@ public class Shooter implements GreenSubsystem, Subsystem {
         controller.setPID(kP, kI, kD);
     }
 
-    public void startFlywheel(){
-        //update later
-        if(Globals.autoAimEnabled){
-            double d = targeting.getDistanceToGoal();
-
-            target = ShooterData.velocityFromDistance(d);
-            setTargetVelocity(target);
-
-            state = State.AUTO;
-        } else{
-            state = State.MANUAL;
-        }
+    public void setShooterState(State s){
+        state = s;
     }
 
     public void stop(){
@@ -97,27 +88,9 @@ public class Shooter implements GreenSubsystem, Subsystem {
         return target;
     }
 
-    public void updateHood() {
-        if (state == State.AUTO) {
-            double d = targeting.getDistanceToGoal();
-            double hoodPosition = ShooterData.hoodFromDistance(d);
-
-            hoodServo.setPosition(hoodPosition);
-        } else {
-            hoodServo.setPosition(DEFAULT_HOOD_POSITION);
-        }
-    }
-
     @Override
     public void update(){
-        if(!started){
-            startFlywheel();
-            started = true;
-        }
-
-        velocity = flywheel.getVelocity();
-
-        updateHood();
+        velocity = flywheel1.getVelocity();
 
         double power = 0;
         switch(state){
@@ -131,9 +104,13 @@ public class Shooter implements GreenSubsystem, Subsystem {
                 target = DEFAULT_VELOCITY;
                 power = controller.calculate(velocity, target) + ff  * target;
                 break;
+            case REVERSE:
+                power = -1;
+                break;
         }
 
-        flywheel.setPower(power);
+        flywheel1.setPower(power);
+        flywheel2.setPower(power);
     }
 
     @Override

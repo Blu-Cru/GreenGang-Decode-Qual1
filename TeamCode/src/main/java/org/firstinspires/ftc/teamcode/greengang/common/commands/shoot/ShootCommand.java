@@ -2,18 +2,9 @@ package org.firstinspires.ftc.teamcode.greengang.common.commands.shoot;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.ExtendHardstopCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.RetractHardstopCommand;
-import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.StopIntakeCommand;
-import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.LiftBallCommand;
-import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.StartFlywheelCommand;
-import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.StopLiftingBallCommand;
-import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.StopShooterCommand;
-import org.firstinspires.ftc.teamcode.greengang.common.commands.intake.IntakeCommand;
-import org.firstinspires.ftc.teamcode.greengang.common.subsystems.shooter.Shooter;
-import org.firstinspires.ftc.teamcode.greengang.common.util.Robot;
 
 public class ShootCommand extends SequentialCommandGroup {
     public ShootCommand(){

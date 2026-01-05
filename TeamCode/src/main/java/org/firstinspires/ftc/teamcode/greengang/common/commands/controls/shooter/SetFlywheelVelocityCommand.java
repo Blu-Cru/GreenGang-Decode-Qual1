@@ -4,14 +4,14 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 
 import org.firstinspires.ftc.teamcode.greengang.common.util.Robot;
 
-public class LiftBallCommand extends InstantCommand {
-    public LiftBallCommand(){
+public class SetFlywheelVelocityCommand extends InstantCommand {
+    public SetFlywheelVelocityCommand(double velocity){
         super(
                 () -> {
-                    Robot.getInstance().intake.lift();
+                    Robot.getInstance().sh.setTargetVelocity(velocity);
                 }
         );
 
-        addRequirements(Robot.getInstance().intake);
+        addRequirements(Robot.getInstance().sh);
     }
 }
