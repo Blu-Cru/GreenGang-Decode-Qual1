@@ -116,8 +116,8 @@ public class Tele extends GreenLinearOpMode {
 
                 .state(State.START)
                 .onEnter(() -> {
-                    new StopIntakeCommand().schedule();
-                    new StopShooterCommand().schedule();
+                    intake.stop();
+                    sh.stop();
                 })
                 .transition(this::shootButtons, State.SHOOT)
                 .transition(this::bothTriggers, State.INTAKE)
@@ -127,8 +127,8 @@ public class Tele extends GreenLinearOpMode {
 
                 .state(State.INTAKE)
                 .onEnter(() -> {
-                    new StartIntakeCommand().schedule();
-                    new StopShooterCommand().schedule();
+                    intake.in();
+                    sh.stop();
                 })
                 .transition(this::shootButtons, State.SHOOT)
                 .transition(this::rightTrigger, State.SPINUP)
@@ -137,7 +137,7 @@ public class Tele extends GreenLinearOpMode {
 
                 .state(State.SPINUP)
                 .onEnter(() -> {
-                    new StopIntakeCommand().schedule();
+                    intake.stop();
                 })
                 .loop(() -> {
                     if(autoAimToggle){
@@ -154,7 +154,7 @@ public class Tele extends GreenLinearOpMode {
 
                 .state(State.SHOOT)
                 .onEnter(() -> {
-                    new StartIntakeCommand().schedule();
+                    intake.in();
                 })
                 .loop(() -> {
                     if(autoAimToggle){
@@ -173,7 +173,7 @@ public class Tele extends GreenLinearOpMode {
                 .state(State.SPIT)
                 .onEnter(() -> {
                     sh.setShooterState(Shooter.State.REVERSE);
-                    new SpitCommand().schedule();
+                    intake.spit();
                 })
                 .transition(this::shootButtons, State.SHOOT)
                 .transition(this::bothTriggers, State.INTAKE)
