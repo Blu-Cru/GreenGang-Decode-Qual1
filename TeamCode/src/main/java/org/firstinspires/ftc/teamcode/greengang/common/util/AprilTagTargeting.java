@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.greengang.common.util;
 
-import org.firstinspires.ftc.teamcode.greengang.common.subsystems.drive.Drivetrain;
+import org.firstinspires.ftc.teamcode.greengang.common.subsystems.drive.DrivetrainOLD;
 
 public class AprilTagTargeting {
 
-    private Drivetrain drivetrain;
+    private DrivetrainOLD drivetrainOLD;
 
-    public AprilTagTargeting(Drivetrain drivetrain) {
-        this.drivetrain = drivetrain;
+    public AprilTagTargeting(DrivetrainOLD drivetrainOLD) {
+        this.drivetrainOLD = drivetrainOLD;
     }
 
     public double getGoalX() {
@@ -23,14 +23,14 @@ public class AprilTagTargeting {
     }
 
     public double getDistanceToGoal() {
-        double robotX = drivetrain.pose.position.x;
-        double robotY = drivetrain.pose.position.y;
+        double robotX = drivetrainOLD.pose.position.x;
+        double robotY = drivetrainOLD.pose.position.y;
         return Math.hypot(getGoalX() - robotX, getGoalY() - robotY);
     }
 
     public double getHeadingToGoal() {
-        double robotX = drivetrain.pose.position.x;
-        double robotY = drivetrain.pose.position.y;
+        double robotX = drivetrainOLD.pose.position.x;
+        double robotY = drivetrainOLD.pose.position.y;
         return Math.atan2(getGoalY() - robotY, getGoalX() - robotX);
     }
 }

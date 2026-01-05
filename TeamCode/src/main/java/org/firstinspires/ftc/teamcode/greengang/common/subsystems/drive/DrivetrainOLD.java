@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.greengang.common.util.Globals;
 import org.firstinspires.ftc.teamcode.greengang.common.util.GreenSubsystem;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-public class Drivetrain implements GreenSubsystem, Subsystem {
+public class DrivetrainOLD implements GreenSubsystem, Subsystem {
     public final MecanumDrive drive;
     public final DrivePID pid;
 
@@ -25,7 +25,7 @@ public class Drivetrain implements GreenSubsystem, Subsystem {
     public double deadzone = 0.05;
     public boolean driverControlTurn = true;
 
-    public Drivetrain(HardwareMap hardwareMap) {
+    public DrivetrainOLD(HardwareMap hardwareMap) {
         drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         pid = new DrivePID();
     }

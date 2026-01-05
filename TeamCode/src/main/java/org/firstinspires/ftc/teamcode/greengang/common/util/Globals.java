@@ -23,6 +23,11 @@ public class Globals {
 
     public static double voltage = 13.0;
 
+    public static String frontLeft = "leftFront";
+    public static String frontRight = "rightFront";
+    public static String backLeft = "leftBack";
+    public static String backRight = "rightBack";
+
     public static void setAlliance(Alliance alliance) {
         Globals.alliance = alliance;
     }

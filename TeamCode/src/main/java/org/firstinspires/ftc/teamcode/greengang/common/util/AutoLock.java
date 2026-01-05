@@ -6,18 +6,18 @@ import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.greengang.common.subsystems.drive.Drivetrain;
+import org.firstinspires.ftc.teamcode.greengang.common.subsystems.drive.DrivetrainOLD;
 
 import java.util.List;
 
 public class AutoLock implements GreenSubsystem, Subsystem {
-    public Drivetrain drivetrain;
+    public DrivetrainOLD drivetrainOLD;
     public Limelight3A limelight;
     AprilTagTargeting targeting;
     LLResult result;
 
-    public AutoLock(Limelight3A limelight, Drivetrain drivetrain){
-        this.drivetrain = drivetrain;
+    public AutoLock(Limelight3A limelight, DrivetrainOLD drivetrainOLD){
+        this.drivetrainOLD = drivetrainOLD;
         this.limelight = limelight;
     }
 
@@ -52,14 +52,14 @@ public class AutoLock implements GreenSubsystem, Subsystem {
             if(targetTag != null){
                 double xError = targetTag.getTargetXDegrees();
 
-                drivetrain.pid.setTargetHeading(drivetrain.heading - Math.toRadians(xError));
+                drivetrainOLD.pid.setTargetHeading(drivetrainOLD.heading - Math.toRadians(xError));
                 return;
             }
         }
 
         double heading = targeting.getHeadingToGoal();
 
-        drivetrain.pid.setTargetHeading(heading);
+        drivetrainOLD.pid.setTargetHeading(heading);
     }
 
     public void relocalize(){
@@ -72,7 +72,7 @@ public class AutoLock implements GreenSubsystem, Subsystem {
                 int id = res.getFiducialId();
 
                 if (id == 20 || id == 24) {
-                    drivetrain.relocalizeFromLimelight(result.getBotpose());
+                    drivetrainOLD.relocalizeFromLimelight(result.getBotpose());
                     break;
                 }
             }

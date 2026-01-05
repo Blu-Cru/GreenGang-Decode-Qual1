@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.commonA.drivetrainA.Drivetrain;
+import org.firstinspires.ftc.teamcode.commonA.outtakeA.ShooterA;
 import org.firstinspires.ftc.teamcode.greengang.common.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.greengang.common.subsystems.shooter.Kicker;
 import org.firstinspires.ftc.teamcode.greengang.common.subsystems.shooter.Shooter;
@@ -15,13 +17,14 @@ import org.firstinspires.ftc.teamcode.greengang.common.subsystems.drive.Drive;
 import org.firstinspires.ftc.teamcode.greengang.common.util.StickyGamepad;
 import org.firstinspires.ftc.teamcode.greengang.common.util.Globals;
 import org.firstinspires.ftc.teamcode.greengang.common.util.Robot;
-import org.firstinspires.ftc.teamcode.greengang.common.subsystems.drive.Drivetrain;
+import org.firstinspires.ftc.teamcode.greengang.common.subsystems.drive.DrivetrainOLD;
 
 public abstract class GreenLinearOpMode extends LinearOpMode {
 
     public Robot robot;
     public Drivetrain drivetrain;
     public Shooter sh;
+    public ShooterA shooterA;
     public Intake intake;
     public Kicker kicker;
     public StickyGamepad stickyG1;
@@ -117,6 +120,7 @@ public abstract class GreenLinearOpMode extends LinearOpMode {
     public void addStickyG1() {stickyG1 = new StickyGamepad(gamepad1);}
     public void addStickyG2() {stickyG2 = new StickyGamepad(gamepad2);}
     public void addShooter() {sh = robot.addShooter();}
+    public void addShooterA(){shooterA = robot.addShooterA();}
     public void addIntake() {intake = robot.addIntake();}
     public void addKicker() {kicker = robot.addKicker();}
 

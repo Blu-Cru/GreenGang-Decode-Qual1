@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.commonA.drivetrainA.DrivetrainA;
+import org.firstinspires.ftc.teamcode.commonA.drivetrainA.Drivetrain;
 import org.firstinspires.ftc.teamcode.commonA.intakeA.IntakeA;
 import org.firstinspires.ftc.teamcode.commonA.outtakeA.OuttakeA;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 public class FullTeleBlue extends CommandOpMode {
 
     // --- SUBSYSTEMS ---
-    private DrivetrainA drivetrain;
+    private Drivetrain drivetrain;
     private IntakeA intake;
     private OuttakeA outtake;
     private Follower follower;
@@ -54,7 +54,7 @@ public class FullTeleBlue extends CommandOpMode {
         // Hardware Mapping
         intake = new IntakeA(hardwareMap);
         outtake = new OuttakeA(hardwareMap);
-        intake.setIntakeState(IntakeA.IntakeState.IDLE);
+        intake.setIntakeState(IntakeA.IntakeState.START);
         intake.periodic();
         outtake.setOuttakeState(OuttakeA.OuttakeState.OFF);
         outtake.periodic();
@@ -67,7 +67,7 @@ public class FullTeleBlue extends CommandOpMode {
         limelight.start();
 
         batterySensor = hardwareMap.voltageSensor.iterator().next();
-        drivetrain = new DrivetrainA(hardwareMap);
+        drivetrain = new Drivetrain(hardwareMap);
         telemetry.addData("Status", "Command System Initialized");
         telemetry.update();
     }
@@ -122,7 +122,7 @@ public class FullTeleBlue extends CommandOpMode {
         // Execute State Logic
         switch (currentState) {
             case START:
-                intake.setIntakeState(IntakeA.IntakeState.IDLE);
+                intake.setIntakeState(IntakeA.IntakeState.START);
                 outtake.setOuttakeState(OuttakeA.OuttakeState.OFF);
                 break;
             case INTAKE_IN:
@@ -138,11 +138,11 @@ public class FullTeleBlue extends CommandOpMode {
                 outtake.setOuttakeState(OuttakeA.OuttakeState.REVERSE);
                 break;
             case OUTTAKE:
-                intake.setIntakeState(IntakeA.IntakeState.IDLE);
+                intake.setIntakeState(IntakeA.IntakeState.START);
                 outtake.setOuttakeState(OuttakeA.OuttakeState.REV);
                 break;
             case SHOOT:
-                intake.setIntakeState(IntakeA.IntakeState.IDLE);
+                intake.setIntakeState(IntakeA.IntakeState.START);
                 outtake.setOuttakeState(OuttakeA.OuttakeState.FIRE);
                 break;
         }

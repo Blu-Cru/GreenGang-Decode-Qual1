@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.greengang.opmodes.auto.Blue;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.arcrobotics.ftclib.command.Command;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -14,7 +13,6 @@ import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.StopIntakeCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.MoveKickerDownCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.StartFlywheelCommand;
-import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.StopLiftingBallCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.StopShooterCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.intake.IntakeCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.shoot.ShootCommand;
@@ -61,9 +59,9 @@ public class TwelveBallAutoBlue extends GreenLinearOpMode {
         addIntake();
 
         Pose2d startPose = new Pose2d(-50, -50, deg(225));
-        drivetrain.drive.localizer.setPose(startPose);
+        drivetrainOLD.drive.localizer.setPose(startPose);
 
-        path = drivetrain.drive.actionBuilder(startPose)
+        path = drivetrainOLD.drive.actionBuilder(startPose)
 
                 .setReversed(true)
                 .setTangent(deg(45))
@@ -170,7 +168,7 @@ public class TwelveBallAutoBlue extends GreenLinearOpMode {
 
     @Override
     public void telemetry(Telemetry tele) {
-        Pose2d p = drivetrain.drive.localizer.getPose();
+        Pose2d p = drivetrainOLD.drive.localizer.getPose();
 
         tele.addData("x", p.position.x);
         tele.addData("y", p.position.y);

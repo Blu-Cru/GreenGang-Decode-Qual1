@@ -60,9 +60,9 @@ public class TwelveBallAutoRed extends GreenLinearOpMode {
 
         // Reflected start pose
         Pose2d startPose = new Pose2d(-50, 50, deg(-225));
-        drivetrain.drive.localizer.setPose(startPose);
+        drivetrainOLD.drive.localizer.setPose(startPose);
 
-        path = drivetrain.drive.actionBuilder(startPose)
+        path = drivetrainOLD.drive.actionBuilder(startPose)
                 .setReversed(true)
                 .setTangent(deg(-45))
                 .splineToSplineHeading(
@@ -168,7 +168,7 @@ public class TwelveBallAutoRed extends GreenLinearOpMode {
 
     @Override
     public void telemetry(Telemetry tele) {
-        Pose2d p = drivetrain.drive.localizer.getPose();
+        Pose2d p = drivetrainOLD.drive.localizer.getPose();
 
         tele.addData("x", p.position.x);
         tele.addData("y", p.position.y);
