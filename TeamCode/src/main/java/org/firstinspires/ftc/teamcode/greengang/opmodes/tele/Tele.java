@@ -77,7 +77,7 @@ public class Tele extends GreenLinearOpMode {
     }
 
     private boolean rightTrigger() {
-        return gamepad1.right_trigger > 0.1;
+        return gamepad1.right_trigger > 0.1 && !gamepad1.right_bumper;
     }
 
     private boolean leftTrigger() {
@@ -188,6 +188,7 @@ public class Tele extends GreenLinearOpMode {
 
     @Override
     public void periodic() {
+        sm.update();
         follower.update();
 
         double dx, dy;
