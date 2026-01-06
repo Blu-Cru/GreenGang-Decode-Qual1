@@ -41,11 +41,11 @@ public class Tele extends GreenLinearOpMode {
 
     //private VoltageSensor batterySensor;
 
-    public static double TARGET_BLUE_X = 11;
-    public static double TARGET_BLUE_Y = 127;
+    public static double TARGET_BLUE_X = 15;
+    public static double TARGET_BLUE_Y = 130;
 
-    public static double TARGET_RED_X = 11;
-    public static double TARGET_RED_Y = -127;
+    public static double TARGET_RED_X = 130;
+    public static double TARGET_RED_Y = 130;
 
     public static double headingP = 2.05;
     public static double headingD = 1.88;
