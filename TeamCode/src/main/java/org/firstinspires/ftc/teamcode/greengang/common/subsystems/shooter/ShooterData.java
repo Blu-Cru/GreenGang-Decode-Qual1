@@ -12,6 +12,8 @@ public class ShooterData {
     //testing purposes
     public static boolean useLookupTable = true;
 
+    public static double maxVelocity = 4000;
+
     private static final double[] DISTANCES = {
             14, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80
     };
@@ -22,8 +24,9 @@ public class ShooterData {
     };
 
     public static double lookupTable(double distance){
-        if (distance >= 175.0) {
-            return 4000;
+        if (distance >= 170) {
+            //seems high enough for basically power 1
+            return maxVelocity;
         }
 
         if (distance <= DISTANCES[0]) {
@@ -43,7 +46,7 @@ public class ShooterData {
             }
         }
 
-        return VELOCITIES[VELOCITIES.length - 1];
+        return maxVelocity;
     }
 
     public static double velocityFromDistance(double d){
