@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.greengang.common.util.Globals;
 
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
@@ -39,10 +40,10 @@ public class Constants {
             .maxPower(1)
             .xVelocity(95)
             .yVelocity(78)
-            .rightFrontMotorName("rightFront")
-            .rightRearMotorName("rightBack")
-            .leftRearMotorName("leftBack")
-            .leftFrontMotorName("leftFront")
+            .rightFrontMotorName(Globals.frontRight)
+            .rightRearMotorName(Globals.backRight)
+            .leftRearMotorName(Globals.backLeft)
+            .leftFrontMotorName(Globals.frontLeft)
             .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
