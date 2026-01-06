@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.greengang.common.subsystems.drive;
 
 
-import com.acmerobotics.roadrunner.Pose2d;
 import com.arcrobotics.ftclib.command.Subsystem;
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.PedroCoordinates;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -13,20 +11,26 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.greengang.common.util.AprilTagMap;
 import org.firstinspires.ftc.teamcode.greengang.common.util.GreenSubsystem;
 import org.firstinspires.ftc.teamcode.greengang.common.util.Globals;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 public class Drivetrain implements GreenSubsystem, Subsystem {
     public Follower follower;
+    public DrivePID drivePID;
 
     public DcMotorEx frontLeft;
     public DcMotorEx frontRight;
     public DcMotorEx backLeft;
     public DcMotorEx backRight;
 
-    public Pose2d pose;
+    public Pose pose;
     public double heading;
+
+
+    double targetHeading = 0;
+    double error = 0;
 
     public Drivetrain(HardwareMap hardwareMap) {
         frontLeft = hardwareMap.get(DcMotorEx.class, Globals.frontLeft);
@@ -41,6 +45,8 @@ public class Drivetrain implements GreenSubsystem, Subsystem {
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        drivePID = new DrivePID();
 
         follower = Constants.createFollower(hardwareMap);
     }
@@ -94,24 +100,49 @@ public class Drivetrain implements GreenSubsystem, Subsystem {
         backRight.setPower((rotY + rotX - rx) / denom);
     }
 
+    public void teleOpDrive(Gamepad gamepad1){
+        double drive = -gamepad1.left_stick_y;
+        double strafe = -gamepad1.left_stick_x;
+        double turn = 0;
+
+        if (Globals.autoAimEnabled) {
+            double[] distances = AprilTagMap.getDistanceXY(pose.getX(), pose.getY());
+            
+            double dx = distances[0];
+            double dy = distances[1];
+            
+            targetHeading = Math.atan2(dy, dx);
+
+            turn = drivePID.getRotatePower(heading, targetHeading);
+        } else {
+            turn = -gamepad1.right_stick_x;
+
+            drivePID.reset();
+        }
+
+        drive(drive, -strafe, -turn, true);
+    }
+
     @Override
     public void init() {
         follower.setStartingPose(Globals.startPose);
-        pose = new Pose2d(follower.getPose().getX(), follower.getPose().getY(), follower.getPose().getHeading());
+        pose = follower.getPose();
     }
 
     @Override
     public void update() {
         follower.update();
 
-        pose = new Pose2d(follower.getPose().getX(), follower.getPose().getY(), follower.getPose().getHeading());
-        heading = pose.heading.toDouble();
+        pose = follower.getPose();
+        heading = pose.getHeading();
     }
 
     @Override
     public void telemetry(Telemetry telemetry) {
-        telemetry.addData("x", pose.position.x);
-        telemetry.addData("y", pose.position.y);
+        telemetry.addData("x", pose.getX());
+        telemetry.addData("y", pose.getY());
         telemetry.addData("Heading (deg)", Math.toDegrees(heading));
+        telemetry.addData("Drivetrain Target", targetHeading);
+        telemetry.addData("Drivetrain Error", error);
     }
 }

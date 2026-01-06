@@ -32,6 +32,7 @@ import org.firstinspires.ftc.teamcode.greengang.common.util.Globals;
 import org.firstinspires.ftc.teamcode.greengang.common.util.StickyGamepad;
 import org.firstinspires.ftc.teamcode.greengang.opmodes.GreenLinearOpMode;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.greengang.common.util.AprilTagMap;
 
 @Config
 @TeleOp(name = "BlueTele2", group = "TeleOp")
@@ -41,25 +42,16 @@ public class Tele extends GreenLinearOpMode {
 
     //private VoltageSensor batterySensor;
 
-    public static double TARGET_BLUE_X = 15;
-    public static double TARGET_BLUE_Y = 130;
-
-    public static double TARGET_RED_X = 130;
-    public static double TARGET_RED_Y = 130;
-
-    public static double headingP = 2.05;
-    public static double headingD = 1.88;
 
 //    public static double COEFF_A = 0.045, COEFF_B = 12.5, COEFF_C = 2200.0;
 //    public static double HOOD_BASE = 0, HOOD_SLOPE = 0.0001;
 //    public static double VELO_GAIN = 1.15, VOLT_NOMINAL = 13.0;
 
-    public boolean autoAimToggle = false;
     public double targetDistance = 0;
     public double autoAimTargetVelocity = 0;
 
-    double targetHeading = 0;
-    double error = 0;
+
+    public double DEADZONE = 0.2;
 
     public enum State {
         START,
@@ -71,24 +63,21 @@ public class Tele extends GreenLinearOpMode {
     StateMachine sm;
 
     public State state = State.START;
-    private double manualRPM = 4000;
-
-    private PDController headingPD;
 
     private boolean bothTriggers() {
-        return gamepad1.left_trigger > 0.1 && gamepad1.right_trigger > 0.1;
+        return gamepad1.left_trigger > DEADZONE && gamepad1.right_trigger > DEADZONE;
     }
 
     private boolean rightTrigger() {
-        return gamepad1.right_trigger > 0.1 && gamepad1.left_trigger <= 0.1;
+        return gamepad1.right_trigger > DEADZONE && gamepad1.left_trigger <= DEADZONE;
     }
 
     private boolean leftTrigger() {
-        return gamepad1.left_trigger > 0.1 && gamepad1.right_trigger <= 0.1;
+        return gamepad1.left_trigger > DEADZONE && gamepad1.right_trigger <= DEADZONE;
     }
 
     private boolean x(){
-        return gamepad1.x && gamepad1.left_trigger <= 0.1 && gamepad1.right_trigger <= 0.1;
+        return gamepad1.x && gamepad1.left_trigger <= DEADZONE && gamepad1.right_trigger <= DEADZONE;
     }
 
     private boolean noInput() {
@@ -112,8 +101,6 @@ public class Tele extends GreenLinearOpMode {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(0);
         limelight.start();
-
-        headingPD = new PDController(headingP, headingD);
 
         //batterySensor = hardwareMap.voltageSensor.iterator().next();
 
@@ -148,10 +135,10 @@ public class Tele extends GreenLinearOpMode {
                     intake.stop();
                 })
                 .loop(() -> {
-                    if(autoAimToggle){
+                    if(Globals.autoAimEnabled){
                         sh.setTargetVelocity(autoAimTargetVelocity);
                     } else {
-                        sh.setTargetVelocity(manualRPM);
+                        sh.setShooterState(Shooter.State.MANUAL);
                     }
                 })
                 .transition(this::bothTriggers, State.SHOOT)
@@ -169,10 +156,10 @@ public class Tele extends GreenLinearOpMode {
                 })
 
                 .loop(() -> {
-                    if(autoAimToggle){
+                    if(Globals.autoAimEnabled){
                         sh.setTargetVelocity(autoAimTargetVelocity);
                     } else {
-                        sh.setTargetVelocity(manualRPM);
+                        sh.setShooterState(Shooter.State.MANUAL);
                     }
                 })
 
@@ -201,62 +188,39 @@ public class Tele extends GreenLinearOpMode {
         sm.update();
         follower = drivetrain.follower;
 
-        double dx, dy;
+        drivetrain.teleOpDrive(gamepad1);
 
-        if(Globals.alliance == Alliance.BLUE) {
-            dx = TARGET_BLUE_X - drivetrain.pose.position.x;
-            dy = TARGET_BLUE_Y - drivetrain.pose.position.y;
-        } else {
-            dx = TARGET_RED_X - drivetrain.pose.position.x;
-            dy = TARGET_RED_Y - drivetrain.pose.position.y;
-        }
+        double x = drivetrain.pose.getX();
+        double y = drivetrain.pose.getY();
+
+        double[] distances = AprilTagMap.getDistanceXY(x, y);
+        double dx = distances[0];
+        double dy = distances[1];
 
         targetDistance = Math.hypot(dx, dy);
 
         autoAimTargetVelocity = velocityFromDistance(targetDistance);
-
-        //auto aim and drive
-        double drive = -gamepad1.left_stick_y;
-        double strafe = -gamepad1.left_stick_x;
-        double turn;
-
-        if (autoAimToggle) {
-            targetHeading = Math.atan2(dy, dx);
-            error = targetHeading - drivetrain.heading;
-
-            while (error > Math.PI) error -= 2 * Math.PI;
-            while (error < -Math.PI) error += 2 * Math.PI;
-
-            turn = headingPD.calculate(0, error);
-        } else {
-            turn = -gamepad1.right_stick_x;
-
-            headingPD.reset();
-
-            if (gamepad1.dpad_left || gamepad2.dpad_left) manualRPM -= 5;
-            else if (gamepad1.dpad_right || gamepad2.dpad_right) manualRPM += 5;
-        }
-
-        drivetrain.drive(drive, -strafe, -turn, true);
-
 
         if(stickyG1.a){
             new KickBallCommand().schedule();
         }
 
         if(stickyG1.dpad_up) {
-            autoAimToggle = !autoAimToggle;
+            Globals.autoAimEnabled = !Globals.autoAimEnabled;
+        }
+
+        if(Globals.autoAimEnabled){
+            if (gamepad1.dpad_left || gamepad2.dpad_left) sh.decreaseVelocity(5);
+            else if (gamepad1.dpad_right || gamepad2.dpad_right) sh.increaseVelocity(5);
         }
     }
 
     @Override
     public void telemetry(Telemetry tele) {
         tele.addData("State", state);
-        tele.addData("Lock", autoAimToggle ? "ON" : "START");
+        tele.addData("Lock", Globals.autoAimEnabled ? "ON" : "START");
         tele.addData("Target Distance", targetDistance);
-        tele.addData("X,Y", drivetrain.pose.position.x + "," + drivetrain.pose.position.y);
-        tele.addData("Drivetrain Target", targetHeading);
-        tele.addData("Drivetrain Error", error);
+        tele.addData("X,Y", drivetrain.pose.getX() + "," + drivetrain.pose.getY());
 
     }
 }

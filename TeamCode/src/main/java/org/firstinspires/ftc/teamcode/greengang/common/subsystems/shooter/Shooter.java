@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.greengang.common.subsystems.shooter;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.command.Subsystem;
@@ -10,8 +8,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.greengang.common.util.AprilTagTargeting;
-import org.firstinspires.ftc.teamcode.greengang.common.util.Globals;
 import org.firstinspires.ftc.teamcode.greengang.common.util.GreenSubsystem;
 
 @Config
@@ -20,7 +16,7 @@ public class Shooter implements GreenSubsystem, Subsystem {
     public static double target, velocity = 0;
 
     //tune these
-    public static double DEFAULT_VELOCITY = 4000;
+    public static double DEFAULT_VELOCITY = 1500;
     public static double DEFAULT_HOOD_POSITION = 0;
 
     public enum State {
@@ -62,6 +58,14 @@ public class Shooter implements GreenSubsystem, Subsystem {
         hoodServo.setPosition(DEFAULT_HOOD_POSITION);
     }
 
+    public void increaseVelocity(double increment){
+        target -= increment;
+    }
+
+    public void decreaseVelocity(double decrement){
+        target -= decrement;
+    }
+
 
     public void setTargetVelocity(double t){
         state = State.AUTO;
@@ -97,15 +101,14 @@ public class Shooter implements GreenSubsystem, Subsystem {
             case IDLE:
                 power = 0;
                 break;
+            case REVERSE:
+                power = -1;
+                break;
             case AUTO:
                 power = controller.calculate(velocity, target) + ff  * target;
                 break;
             case MANUAL:
-                target = DEFAULT_VELOCITY;
-                power = controller.calculate(velocity, target) + ff  * target;
-                break;
-            case REVERSE:
-                power = -1;
+                power = controller.calculate(velocity, DEFAULT_VELOCITY) + ff  * DEFAULT_VELOCITY;
                 break;
         }
 
@@ -116,7 +119,7 @@ public class Shooter implements GreenSubsystem, Subsystem {
     @Override
     public void telemetry(Telemetry tele){
         tele.addData("velocity", velocity);
-        tele.addData("target", target);
+        tele.addData("target velocity", state == State.AUTO ? target : DEFAULT_VELOCITY);
     }
 }
 

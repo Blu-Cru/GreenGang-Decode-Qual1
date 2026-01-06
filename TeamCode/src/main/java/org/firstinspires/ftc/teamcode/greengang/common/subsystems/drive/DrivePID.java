@@ -7,30 +7,23 @@ import com.qualcomm.robotcore.util.Range;
 @Config
 public class DrivePID {
 
-    public static double kPHeading = 0, kIHeading = 0, kDHeading = 0;
+    public static double kPHeading = 2.05, kIHeading = 0, kDHeading = 1.88;
 
-    private PIDController headingController;
-    private double targetHeading;
+    public PIDController headingController;
 
     public DrivePID() {
         headingController = new PIDController(kPHeading, kIHeading, kDHeading);
-        targetHeading = 0;
-    }
-
-    public void setTargetHeading(double target) {
-        targetHeading = angleWrap(target);
-        headingController.setSetPoint(0);
     }
     
     public void reset() {
         headingController.reset();
     }
 
-    public double getRotatePower(double currentHeading) {
+    public double getRotatePower(double currentHeading, double targetHeading) {
         headingController.setPID(kPHeading, kIHeading, kDHeading);
 
-        double error = angleWrap(targetHeading - angleWrap(currentHeading));
-        double output = headingController.calculate(error, 0);
+        double error = angleWrap(angleWrap(targetHeading) - currentHeading);
+        double output = headingController.calculate(0, error);
 
         return Range.clip(output, -1, 1);
     }
