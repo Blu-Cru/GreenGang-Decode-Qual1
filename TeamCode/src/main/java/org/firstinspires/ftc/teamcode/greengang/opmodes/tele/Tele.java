@@ -38,7 +38,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 public class Tele extends GreenLinearOpMode {
     Follower follower;
     Limelight3A limelight;
-    
+
     //private VoltageSensor batterySensor;
 
     public static double TARGET_BLUE_X = 11;
@@ -49,19 +49,22 @@ public class Tele extends GreenLinearOpMode {
 
     public static double headingP = 2.05;
     public static double headingD = 1.88;
-    
+
 //    public static double COEFF_A = 0.045, COEFF_B = 12.5, COEFF_C = 2200.0;
 //    public static double HOOD_BASE = 0, HOOD_SLOPE = 0.0001;
 //    public static double VELO_GAIN = 1.15, VOLT_NOMINAL = 13.0;
-    
+
     public boolean autoAimToggle = false;
     public double targetDistance = 0;
     public double autoAimTargetVelocity = 0;
 
+    double targetHeading = 0;
+    double error = 0;
+
     public enum State {
         START,
         INTAKE,
-        SPIT, 
+        SPIT,
         SPINUP,
         SHOOT
     }
@@ -218,13 +221,13 @@ public class Tele extends GreenLinearOpMode {
         double turn;
 
         if (autoAimToggle) {
-            double targetHeading = Math.atan2(dy, dx);
-            double error = Math.toRadians(targetHeading - drivetrain.heading);
+            targetHeading = Math.atan2(dy, dx);
+            error = targetHeading - drivetrain.heading;
 
-            //clamp between -pi and pi
-            error = Math.atan2(Math.sin(error), Math.cos(error));
+            while (error > Math.PI) error -= 2 * Math.PI;
+            while (error < -Math.PI) error += 2 * Math.PI;
 
-            turn = headingPD.calculate(error);
+            turn = headingPD.calculate(0, error);
         } else {
             turn = -gamepad1.right_stick_x;
 
@@ -252,5 +255,8 @@ public class Tele extends GreenLinearOpMode {
         tele.addData("Lock", autoAimToggle ? "ON" : "START");
         tele.addData("Target Distance", targetDistance);
         tele.addData("X,Y", drivetrain.pose.position.x + "," + drivetrain.pose.position.y);
+        tele.addData("Drivetrain Target", targetHeading);
+        tele.addData("Drivetrain Error", error);
+
     }
 }
