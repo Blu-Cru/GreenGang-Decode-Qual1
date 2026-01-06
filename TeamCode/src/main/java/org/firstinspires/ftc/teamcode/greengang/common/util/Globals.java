@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -17,6 +18,8 @@ public class Globals {
     // default alliance is red, but will be changed before auto starts
     public static Alliance alliance = Alliance.RED;
     public static ElapsedTime runtime;
+
+    public static Pose startPose = new Pose(45, 120, Math.toRadians(180));
 
     public static boolean fieldCentric = true;
     public static boolean autoAimEnabled = false;

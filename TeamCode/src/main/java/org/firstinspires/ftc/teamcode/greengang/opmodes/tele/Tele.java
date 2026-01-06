@@ -68,7 +68,7 @@ public class Tele extends GreenLinearOpMode {
     StateMachine sm;
 
     public State state = State.START;
-    private double manualRPM = 2100;
+    private double manualRPM = 4000;
 
     private PDController headingPD;
 
@@ -76,24 +76,23 @@ public class Tele extends GreenLinearOpMode {
         return gamepad1.left_trigger > 0.1 && gamepad1.right_trigger > 0.1;
     }
 
-    private boolean shootButtons() {
-        return gamepad1.right_trigger > 0.1 && gamepad1.right_bumper;
-    }
-
     private boolean rightTrigger() {
-        return gamepad1.right_trigger > 0.1 && !gamepad1.right_bumper;
+        return gamepad1.right_trigger > 0.1 && gamepad1.left_trigger <= 0.1;
     }
 
     private boolean leftTrigger() {
-        return gamepad1.left_trigger > 0.1;
+        return gamepad1.left_trigger > 0.1 && gamepad1.right_trigger <= 0.1;
+    }
+
+    private boolean x(){
+        return gamepad1.x && gamepad1.left_trigger <= 0.1 && gamepad1.right_trigger <= 0.1;
     }
 
     private boolean noInput() {
         return !bothTriggers()
-                && !shootButtons()
                 && !rightTrigger()
                 && !leftTrigger()
-                && !gamepad1.x;
+                && !x();
     }
 
     @Override
@@ -105,8 +104,7 @@ public class Tele extends GreenLinearOpMode {
         addKicker();
         addIntake();
 
-        follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(45, 120, Math.toRadians(180)));
+        follower = drivetrain.follower;
 
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(0);
@@ -123,11 +121,10 @@ public class Tele extends GreenLinearOpMode {
                     intake.stop();
                     sh.stop();
                 })
-                .transition(this::shootButtons, State.SHOOT)
-                .transition(this::bothTriggers, State.INTAKE)
+                .transition(this::bothTriggers, State.SHOOT)
                 .transition(this::rightTrigger, State.SPINUP)
                 .transition(this::leftTrigger, State.INTAKE)
-                .transition(() -> gamepad1.x, State.SPIT)
+                .transition(this::x, State.SPIT)
 
                 .state(State.INTAKE)
                 .onEnter(() -> {
@@ -138,9 +135,9 @@ public class Tele extends GreenLinearOpMode {
                             new StartIntakeCommand()
                     ).schedule();
                 })
-                .transition(this::shootButtons, State.SHOOT)
+                .transition(this::bothTriggers, State.SHOOT)
                 .transition(this::rightTrigger, State.SPINUP)
-                .transition(() -> gamepad1.x, State.SPIT)
+                .transition(this::x, State.SPIT)
                 .transition(this::noInput, State.START)
 
                 .state(State.SPINUP)
@@ -154,10 +151,9 @@ public class Tele extends GreenLinearOpMode {
                         sh.setTargetVelocity(manualRPM);
                     }
                 })
-                .transition(this::shootButtons, State.SHOOT)
-                .transition(this::bothTriggers, State.INTAKE)
+                .transition(this::bothTriggers, State.SHOOT)
                 .transition(this::leftTrigger, State.INTAKE)
-                .transition(() -> gamepad1.x, State.SPIT)
+                .transition(this::x, State.SPIT)
                 .transition(this::noInput, State.START)
 
                 .state(State.SHOOT)
@@ -168,6 +164,7 @@ public class Tele extends GreenLinearOpMode {
                             new IntakeCommand()
                     ).schedule();
                 })
+
                 .loop(() -> {
                     if(autoAimToggle){
                         sh.setTargetVelocity(autoAimTargetVelocity);
@@ -176,10 +173,9 @@ public class Tele extends GreenLinearOpMode {
                     }
                 })
 
-                .transition(this::bothTriggers, State.INTAKE)
                 .transition(this::rightTrigger, State.SPINUP)
                 .transition(this::leftTrigger, State.INTAKE)
-                .transition(() -> gamepad1.x, State.SPIT)
+                .transition(this::x, State.SPIT)
                 .transition(this::noInput, State.START)
 
                 .state(State.SPIT)
@@ -187,8 +183,7 @@ public class Tele extends GreenLinearOpMode {
                     sh.setShooterState(Shooter.State.REVERSE);
                     intake.spit();
                 })
-                .transition(this::shootButtons, State.SHOOT)
-                .transition(this::bothTriggers, State.INTAKE)
+                .transition(this::bothTriggers, State.SHOOT)
                 .transition(this::rightTrigger, State.SPINUP)
                 .transition(this::leftTrigger, State.INTAKE)
                 .transition(this::noInput, State.START)
@@ -201,7 +196,7 @@ public class Tele extends GreenLinearOpMode {
     @Override
     public void periodic() {
         sm.update();
-        follower.update();
+        follower = drivetrain.follower;
 
         double dx, dy;
 
@@ -224,7 +219,7 @@ public class Tele extends GreenLinearOpMode {
 
         if (autoAimToggle) {
             double targetHeading = Math.atan2(dy, dx);
-            double error = targetHeading - drivetrain.heading;
+            double error = Math.toRadians(targetHeading - drivetrain.heading);
 
             //clamp between -pi and pi
             error = Math.atan2(Math.sin(error), Math.cos(error));
@@ -245,6 +240,10 @@ public class Tele extends GreenLinearOpMode {
         if(stickyG1.a){
             new KickBallCommand().schedule();
         }
+
+        if(stickyG1.dpad_up) {
+            autoAimToggle = !autoAimToggle;
+        }
     }
 
     @Override
@@ -253,6 +252,5 @@ public class Tele extends GreenLinearOpMode {
         tele.addData("Lock", autoAimToggle ? "ON" : "START");
         tele.addData("Target Distance", targetDistance);
         tele.addData("X,Y", drivetrain.pose.position.x + "," + drivetrain.pose.position.y);
-        tele.addData("Flywheel Velocity", shooterA.getFlywheelVelocity());
     }
 }

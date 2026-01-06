@@ -20,7 +20,7 @@ public class Shooter implements GreenSubsystem, Subsystem {
     public static double target, velocity = 0;
 
     //tune these
-    public static double DEFAULT_VELOCITY = 2200;
+    public static double DEFAULT_VELOCITY = 4000;
     public static double DEFAULT_HOOD_POSITION = 0;
 
     public enum State {

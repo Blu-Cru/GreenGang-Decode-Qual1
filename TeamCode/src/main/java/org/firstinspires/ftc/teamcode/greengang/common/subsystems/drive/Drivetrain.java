@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.greengang.common.subsystems.drive;
 
-import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.arcrobotics.ftclib.command.Subsystem;
+import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.PedroCoordinates;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -15,22 +15,20 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.greengang.common.util.GreenSubsystem;
 import org.firstinspires.ftc.teamcode.greengang.common.util.Globals;
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 public class Drivetrain implements GreenSubsystem, Subsystem {
+    public Follower follower;
 
     public DcMotorEx frontLeft;
     public DcMotorEx frontRight;
     public DcMotorEx backLeft;
     public DcMotorEx backRight;
 
-    public PinpointLocalizer pinpoint;
-
     public Pose2d pose;
     public double heading;
 
     public Drivetrain(HardwareMap hardwareMap) {
-        pinpoint = hardwareMap.get(PinpointLocalizer.class, "pinpoint");
-
         frontLeft = hardwareMap.get(DcMotorEx.class, Globals.frontLeft);
         backLeft = hardwareMap.get(DcMotorEx.class, Globals.backLeft);
         frontRight = hardwareMap.get(DcMotorEx.class, Globals.frontRight);
@@ -43,6 +41,8 @@ public class Drivetrain implements GreenSubsystem, Subsystem {
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        follower = Constants.createFollower(hardwareMap);
     }
 
     public void drive(double drive, double strafe, double turn, boolean cubic) {
@@ -95,10 +95,15 @@ public class Drivetrain implements GreenSubsystem, Subsystem {
     }
 
     @Override
-    public void init() {}
+    public void init() {
+        follower.setStartingPose(Globals.startPose);
+        pose = new Pose2d(follower.getPose().getX(), follower.getPose().getY(), follower.getPose().getHeading());
+    }
 
     @Override
     public void update() {
+        follower.update();
+
         pose = new Pose2d(follower.getPose().getX(), follower.getPose().getY(), follower.getPose().getHeading());
         heading = pose.heading.toDouble();
     }
