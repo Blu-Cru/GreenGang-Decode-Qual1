@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.greengang.common.subsystems.shooter
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.controller.PDController;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
@@ -14,6 +15,7 @@ import com.sfdev.assembly.state.StateMachineBuilder;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.ExtendHardstopCommand;
+import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.RetractHardstopCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.StartIntakeCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.StopIntakeCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.MoveKickerUpCommand;
@@ -21,7 +23,9 @@ import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.spit.SpitCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.StopShooterCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.SwitchFlywheelStateCommand;
+import org.firstinspires.ftc.teamcode.greengang.common.commands.intake.IntakeCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.shoot.KickBallCommand;
+import org.firstinspires.ftc.teamcode.greengang.common.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.greengang.common.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.greengang.common.util.Alliance;
 import org.firstinspires.ftc.teamcode.greengang.common.util.Globals;
@@ -127,8 +131,12 @@ public class Tele extends GreenLinearOpMode {
 
                 .state(State.INTAKE)
                 .onEnter(() -> {
-                    intake.in();
-                    sh.stop();
+                    new SequentialCommandGroup(
+                            new ExtendHardstopCommand(),
+                            new StopShooterCommand(),
+                            new WaitCommand(100),
+                            new StartIntakeCommand()
+                    ).schedule();
                 })
                 .transition(this::shootButtons, State.SHOOT)
                 .transition(this::rightTrigger, State.SPINUP)
@@ -154,7 +162,11 @@ public class Tele extends GreenLinearOpMode {
 
                 .state(State.SHOOT)
                 .onEnter(() -> {
-                    intake.in();
+                    new SequentialCommandGroup(
+                            new RetractHardstopCommand(),
+                            new WaitCommand(100),
+                            new IntakeCommand()
+                    ).schedule();
                 })
                 .loop(() -> {
                     if(autoAimToggle){

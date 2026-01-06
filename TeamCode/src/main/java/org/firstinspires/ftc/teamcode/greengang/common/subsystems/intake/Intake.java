@@ -62,13 +62,7 @@ public class Intake implements GreenSubsystem, Subsystem {
     }
 
     @Override
-    public void update(){
-        if(state != State.IN){
-            retractHardstop();
-        } else{
-            extendHardstop();
-        }
-    }
+    public void update(){}
 
     @Override
     public void telemetry(Telemetry tele){
