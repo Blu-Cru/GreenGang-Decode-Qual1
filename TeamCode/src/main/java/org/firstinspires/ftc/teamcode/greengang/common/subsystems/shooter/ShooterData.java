@@ -24,7 +24,7 @@ public class ShooterData {
     };
 
     public static double lookupTable(double distance){
-        if (distance >= 170) {
+        if (distance >= 150) {
             //seems high enough for basically power 1
             return maxVelocity;
         }
