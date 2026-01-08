@@ -122,7 +122,7 @@ public class OuttakeA extends SubsystemBase{
             case SPIN_UP:
 
                 m_kicker.setPosition(KICKER_RETRACTED_POS);
-//                m_stop.setPosition(0);
+                m_stop.setPosition(0);
                 break;
         }
 

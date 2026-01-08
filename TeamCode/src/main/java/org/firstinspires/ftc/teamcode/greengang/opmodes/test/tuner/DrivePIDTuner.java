@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.greengang.opmodes.test.tuner;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -22,6 +23,11 @@ public class DrivePIDTuner extends GreenLinearOpMode {
         addDrivetrain();
 
         drivePID = new DrivePID();
+
+        telemetry = new MultipleTelemetry(
+                telemetry,
+                FtcDashboard.getInstance().getTelemetry()
+        );
     }
 
     @Override
@@ -29,12 +35,15 @@ public class DrivePIDTuner extends GreenLinearOpMode {
         turn = drivePID.getRotatePower(drivetrain.heading, Math.toRadians(targetHeading));
 
         drivetrain.drive(0, 0, turn, true);
+
+        telemetry.addData("Target", targetHeading);
+        telemetry.addData("Heading", drivetrain.heading);
+        telemetry.addData("Error",targetHeading - drivetrain.heading);
+        telemetry.addData("Turn Power", turn);
+
+        telemetry.update();
     }
 
     @Override
-    public void telemetry(Telemetry tele) {
-        tele.addData("Target", targetHeading);
-        tele.addData("Heading", drivetrain.heading);
-        tele.addData("Turn Power", turn);
-    }
+    public void telemetry(Telemetry tele) {}
 }

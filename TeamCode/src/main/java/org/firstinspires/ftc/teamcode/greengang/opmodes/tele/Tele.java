@@ -197,7 +197,10 @@ public class Tele extends GreenLinearOpMode {
         double dx = distances[0];
         double dy = distances[1];
 
-        targetDistance = Math.hypot(dx, dy) - 15;
+        //measured from front of robot to front of goal for distances
+        //15 inches backboard to front + 9 inches center to front of robot
+
+        targetDistance = Math.hypot(dx, dy) - 24;
 
         autoAimTargetVelocity = velocityFromDistance(targetDistance);
 

@@ -10,25 +10,20 @@ public class ShooterData {
     public static final double C_VEL = 1592.80085;
 
     //testing purposes
-    public static boolean useLookupTable = false;
+    public static boolean useLookupTable = true;
 
     public static double maxVelocity = 4000;
 
     private static final double[] DISTANCES = {
-            14, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80
+            14, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 150
     };
 
     private static final double[] VELOCITIES = {
             1600, 1575, 1575, 1575, 1600, 1625, 1650,
-            1800, 1800, 1850, 1900, 1875, 2000, 2100
+            1800, 1800, 1850, 1900, 1875, 2000, 2100, maxVelocity
     };
 
     public static double lookupTable(double distance){
-        if (distance >= 150) {
-            //seems high enough for basically power 1
-            return maxVelocity;
-        }
-
         if (distance <= DISTANCES[0]) {
             return VELOCITIES[0];
         }
@@ -53,7 +48,7 @@ public class ShooterData {
         if(useLookupTable) {
             return lookupTable(d);
         } else {
-            return A_VEL * d * d + B_VEL * d + C_VEL;
+            return Math.min(maxVelocity, A_VEL * d * d + B_VEL * d + C_VEL);
         }
     }
 }
