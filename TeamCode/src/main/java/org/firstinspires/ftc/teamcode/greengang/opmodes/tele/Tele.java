@@ -24,7 +24,7 @@ import org.firstinspires.ftc.teamcode.greengang.opmodes.GreenLinearOpMode;
 import org.firstinspires.ftc.teamcode.greengang.common.util.AprilTagMap;
 
 @Config
-@TeleOp(name = "BlueTele2", group = "TeleOp")
+@TeleOp(group = "TeleOp")
 public class Tele extends GreenLinearOpMode {
     Follower follower;
     Limelight3A limelight;
