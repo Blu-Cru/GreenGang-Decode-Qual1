@@ -2,11 +2,11 @@ package org.firstinspires.ftc.teamcode.greengang.common.util;
 
 public class AprilTagMap {
     //blue
-    public static double TARGET_BLUE_X = 15;
-    public static double TARGET_BLUE_Y = 130;
+    public static double TARGET_BLUE_X = 0;
+    public static double TARGET_BLUE_Y = 138;
 
-    public static double TARGET_RED_X = 130;
-    public static double TARGET_RED_Y = 130;
+    public static double TARGET_RED_X = 144;
+    public static double TARGET_RED_Y = 144;
 
     public static double[] getDistanceXY(double x, double y) {
         double dx, dy;

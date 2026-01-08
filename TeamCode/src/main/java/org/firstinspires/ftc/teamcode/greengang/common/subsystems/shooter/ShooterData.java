@@ -10,7 +10,7 @@ public class ShooterData {
     public static final double C_VEL = 1592.80085;
 
     //testing purposes
-    public static boolean useLookupTable = true;
+    public static boolean useLookupTable = false;
 
     public static double maxVelocity = 4000;
 

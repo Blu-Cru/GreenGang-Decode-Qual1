@@ -197,15 +197,15 @@ public class Tele extends GreenLinearOpMode {
         double dx = distances[0];
         double dy = distances[1];
 
-        targetDistance = Math.hypot(dx, dy);
+        targetDistance = Math.hypot(dx, dy) - 15;
 
         autoAimTargetVelocity = velocityFromDistance(targetDistance);
 
-        if(stickyG1.a){
+        if(stickyG1.right_bumper){
             new KickBallCommand().schedule();
         }
 
-        if(stickyG1.dpad_up) {
+        if(stickyG1.a) {
             Globals.autoAimEnabled = !Globals.autoAimEnabled;
         }
 
