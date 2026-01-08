@@ -34,7 +34,7 @@ public class DrivePIDTuner extends GreenLinearOpMode {
     public void periodic() {
         turn = drivePID.getRotatePower(drivetrain.heading, Math.toRadians(targetHeading));
 
-        drivetrain.drive(0, 0, turn, true);
+        drivetrain.drive(0, 0, turn, false);
 
         telemetry.addData("Target", targetHeading);
         telemetry.addData("Heading", drivetrain.heading);
