@@ -22,7 +22,7 @@ public abstract class GreenLinearOpMode extends LinearOpMode {
 
     public Robot robot;
     public Drivetrain drivetrain;
-    public Shooter sh;
+    public Shooter shooter;
     public ShooterA shooterA;
     public Intake intake;
     public Kicker kicker;
@@ -118,7 +118,8 @@ public abstract class GreenLinearOpMode extends LinearOpMode {
     public void addDrivetrain() {drivetrain = robot.addDrivetrain();}
     public void addStickyG1() {stickyG1 = new StickyGamepad(gamepad1);}
     public void addStickyG2() {stickyG2 = new StickyGamepad(gamepad2);}
-    public void addShooter() {sh = robot.addShooter();}
+    public void addShooter() {
+        shooter = robot.addShooter();}
     public void addShooterA(){shooterA = robot.addShooterA();}
     public void addIntake() {intake = robot.addIntake();}
     public void addKicker() {kicker = robot.addKicker();}

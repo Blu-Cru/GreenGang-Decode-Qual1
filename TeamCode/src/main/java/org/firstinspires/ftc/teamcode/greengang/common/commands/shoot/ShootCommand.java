@@ -20,8 +20,8 @@ public class ShootCommand extends SequentialCommandGroup {
                         */
                         new RetractHardstopCommand(),
 //                        new WaitUntilCommand(() -> {
-//                            double current = Robot.getInstance().sh.getFlywheelVelocity();
-//                            double target = Robot.getInstance().sh.getFlywheelTargetVelocity();
+//                            double current = Robot.getInstance().shooter.getFlywheelVelocity();
+//                            double target = Robot.getInstance().shooter.getFlywheelTargetVelocity();
 //
 //                            return Math.abs(current - target) <= target * 0.1;
 //                        }),

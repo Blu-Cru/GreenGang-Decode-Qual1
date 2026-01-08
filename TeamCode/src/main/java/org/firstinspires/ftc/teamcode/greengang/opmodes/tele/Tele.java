@@ -5,9 +5,7 @@ import static org.firstinspires.ftc.teamcode.greengang.common.subsystems.shooter
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
-import com.arcrobotics.ftclib.controller.PDController;
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.sfdev.assembly.state.StateMachine;
@@ -17,21 +15,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.ExtendHardstopCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.RetractHardstopCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.StartIntakeCommand;
-import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.intake.StopIntakeCommand;
-import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.MoveKickerUpCommand;
-import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.SetFlywheelVelocityCommand;
-import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.spit.SpitCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.StopShooterCommand;
-import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter.SwitchFlywheelStateCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.intake.IntakeCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.shoot.KickBallCommand;
-import org.firstinspires.ftc.teamcode.greengang.common.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.greengang.common.subsystems.shooter.Shooter;
-import org.firstinspires.ftc.teamcode.greengang.common.util.Alliance;
 import org.firstinspires.ftc.teamcode.greengang.common.util.Globals;
-import org.firstinspires.ftc.teamcode.greengang.common.util.StickyGamepad;
 import org.firstinspires.ftc.teamcode.greengang.opmodes.GreenLinearOpMode;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.greengang.common.util.AprilTagMap;
 
 @Config
@@ -109,7 +98,7 @@ public class Tele extends GreenLinearOpMode {
                 .state(State.START)
                 .onEnter(() -> {
                     intake.stop();
-                    sh.stop();
+                    shooter.stop();
                 })
                 .transition(this::bothTriggers, State.SHOOT)
                 .transition(this::rightTrigger, State.SPINUP)
@@ -136,9 +125,9 @@ public class Tele extends GreenLinearOpMode {
                 })
                 .loop(() -> {
                     if(Globals.autoAimEnabled){
-                        sh.setTargetVelocity(autoAimTargetVelocity);
+                        shooter.setTargetVelocity(autoAimTargetVelocity);
                     } else {
-                        sh.setShooterState(Shooter.State.MANUAL);
+                        shooter.setShooterState(Shooter.State.MANUAL);
                     }
                 })
                 .transition(this::bothTriggers, State.SHOOT)
@@ -157,9 +146,9 @@ public class Tele extends GreenLinearOpMode {
 
                 .loop(() -> {
                     if(Globals.autoAimEnabled){
-                        sh.setTargetVelocity(autoAimTargetVelocity);
+                        shooter.setTargetVelocity(autoAimTargetVelocity);
                     } else {
-                        sh.setShooterState(Shooter.State.MANUAL);
+                        shooter.setShooterState(Shooter.State.MANUAL);
                     }
                 })
 
@@ -170,7 +159,7 @@ public class Tele extends GreenLinearOpMode {
 
                 .state(State.SPIT)
                 .onEnter(() -> {
-                    sh.setShooterState(Shooter.State.REVERSE);
+                    shooter.setShooterState(Shooter.State.REVERSE);
                     intake.spit();
                 })
                 .transition(this::bothTriggers, State.SHOOT)
@@ -213,8 +202,8 @@ public class Tele extends GreenLinearOpMode {
         }
 
         if(Globals.autoAimEnabled){
-            if (gamepad1.dpad_left || gamepad2.dpad_left) sh.decreaseVelocity(5);
-            else if (gamepad1.dpad_right || gamepad2.dpad_right) sh.increaseVelocity(5);
+            if (gamepad1.dpad_left || gamepad2.dpad_left) shooter.decreaseVelocity(5);
+            else if (gamepad1.dpad_right || gamepad2.dpad_right) shooter.increaseVelocity(5);
         }
     }
 

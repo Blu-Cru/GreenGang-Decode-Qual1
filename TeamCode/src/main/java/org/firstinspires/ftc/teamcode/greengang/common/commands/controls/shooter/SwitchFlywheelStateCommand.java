@@ -9,10 +9,10 @@ public class SwitchFlywheelStateCommand extends InstantCommand {
     public SwitchFlywheelStateCommand(Shooter.State state){
         super(
                 () -> {
-                    Robot.getInstance().sh.setShooterState(state);
+                    Robot.getInstance().shooter.setShooterState(state);
                 }
         );
 
-        addRequirements(Robot.getInstance().sh);
+        addRequirements(Robot.getInstance().shooter);
     }
 }

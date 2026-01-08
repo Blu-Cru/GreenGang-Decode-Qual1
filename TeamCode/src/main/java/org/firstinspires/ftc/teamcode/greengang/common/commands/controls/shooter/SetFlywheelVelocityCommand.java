@@ -8,10 +8,10 @@ public class SetFlywheelVelocityCommand extends InstantCommand {
     public SetFlywheelVelocityCommand(double velocity){
         super(
                 () -> {
-                    Robot.getInstance().sh.setTargetVelocity(velocity);
+                    Robot.getInstance().shooter.setTargetVelocity(velocity);
                 }
         );
 
-        addRequirements(Robot.getInstance().sh);
+        addRequirements(Robot.getInstance().shooter);
     }
 }
