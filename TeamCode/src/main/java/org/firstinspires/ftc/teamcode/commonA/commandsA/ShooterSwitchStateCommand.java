@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.commonA.commandsA;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 
-import org.firstinspires.ftc.teamcode.commonA.outtakeA.ShooterA;
 import org.firstinspires.ftc.teamcode.greengang.common.util.Robot;
 
 public class ShooterSwitchStateCommand extends InstantCommand {

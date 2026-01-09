@@ -246,6 +246,7 @@ public class Blue15Ball extends OpMode {
             case SHOOT:
                 outtake.setOuttakeState(OuttakeA.OuttakeState.REV);
 
+
                 if (pathTimer.getElapsedTimeSeconds() > start_shoot_time && pathTimer.getElapsedTimeSeconds() < start_shoot_time + 1.25) {
                     if (pathTimer.getElapsedTimeSeconds() < start_shoot_time + 1.03) {
                         outtake.setTarget_Vel(2160);

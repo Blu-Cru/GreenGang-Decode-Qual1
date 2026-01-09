@@ -20,6 +20,9 @@ public class IntakeA extends SubsystemBase {
     private final double SPIT_POWER = -1.0; // Use negative for reverse direction
     public IntakeA(HardwareMap hardwareMap) {
         intake = hardwareMap.get(DcMotorEx.class, "intake");
+
+
+
     }
 
 
@@ -52,5 +55,4 @@ public class IntakeA extends SubsystemBase {
     }
 
 }
-
 

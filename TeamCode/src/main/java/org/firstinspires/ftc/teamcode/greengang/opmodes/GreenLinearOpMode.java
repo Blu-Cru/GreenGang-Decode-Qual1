@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.greengang.common.subsystems.drive.Drivetrain;
-import org.firstinspires.ftc.teamcode.commonA.outtakeA.ShooterA;
 import org.firstinspires.ftc.teamcode.greengang.common.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.greengang.common.subsystems.shooter.Kicker;
 import org.firstinspires.ftc.teamcode.greengang.common.subsystems.shooter.Shooter;
@@ -23,7 +22,6 @@ public abstract class GreenLinearOpMode extends LinearOpMode {
     public Robot robot;
     public Drivetrain drivetrain;
     public Shooter shooter;
-    public ShooterA shooterA;
     public Intake intake;
     public Kicker kicker;
     public StickyGamepad stickyG1;
@@ -120,7 +118,6 @@ public abstract class GreenLinearOpMode extends LinearOpMode {
     public void addStickyG2() {stickyG2 = new StickyGamepad(gamepad2);}
     public void addShooter() {
         shooter = robot.addShooter();}
-    public void addShooterA(){shooterA = robot.addShooterA();}
     public void addIntake() {intake = robot.addIntake();}
     public void addKicker() {kicker = robot.addKicker();}
 

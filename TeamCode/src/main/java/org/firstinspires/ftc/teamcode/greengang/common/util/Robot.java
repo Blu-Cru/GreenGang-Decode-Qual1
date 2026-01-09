@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.greengang.common.subsystems.drive.Drivetrain;
-import org.firstinspires.ftc.teamcode.commonA.outtakeA.ShooterA;
 import org.firstinspires.ftc.teamcode.greengang.common.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.greengang.common.subsystems.shooter.Kicker;
 import org.firstinspires.ftc.teamcode.greengang.common.subsystems.shooter.Shooter;
@@ -18,7 +17,6 @@ public class Robot {
     // all subsystems
     public Drivetrain drivetrain;
     public Shooter shooter;
-    public ShooterA shooterA;
     public Intake intake;
     public Kicker kicker;
 
@@ -79,13 +77,6 @@ public class Robot {
         subsystems.add(drivetrain);
 
         return drivetrain;
-    }
-
-    public ShooterA addShooterA() {
-        shooterA = new ShooterA(hardwareMap);
-        subsystems.add(shooterA);
-
-        return shooterA;
     }
 
     public void telemetry(Telemetry telemetry) {
