@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter
 import org.firstinspires.ftc.teamcode.greengang.common.commands.intake.IntakeCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.shoot.KickBallCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.subsystems.shooter.Shooter;
+import org.firstinspires.ftc.teamcode.greengang.common.util.Alliance;
 import org.firstinspires.ftc.teamcode.greengang.common.util.Globals;
 import org.firstinspires.ftc.teamcode.greengang.opmodes.GreenLinearOpMode;
 import org.firstinspires.ftc.teamcode.greengang.common.util.AprilTagMap;
@@ -190,7 +191,10 @@ public class Tele extends GreenLinearOpMode {
         //measured from front of robot to front of goal for distances
         //15 inches backboard to front + 9 inches center to front of robot
 
-        targetDistance = Math.hypot(dx, dy) - 24;
+        if(Globals.alliance == Alliance.RED)
+            targetDistance = Math.hypot(dx, dy) - Globals.GOAL_BACK_TO_FRONT_RED - Globals.ROBOT_CENTER_TO_FRONT;
+        else
+            targetDistance = Math.hypot(dx, dy) - Globals.GOAL_BACK_TO_FRONT_BLUE - Globals.ROBOT_CENTER_TO_FRONT;
 
         autoAimTargetVelocity = velocityFromDistance(targetDistance);
 

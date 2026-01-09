@@ -1,24 +1,26 @@
 package org.firstinspires.ftc.teamcode.greengang.common.util;
 
 public class AprilTagMap {
-    //blue
-    public static double TARGET_BLUE_X = 0;
-    public static double TARGET_BLUE_Y = 134;
+    public static final double BLUE_CORNER_X = 0;
+    public static final double BLUE_CORNER_Y = 134;
 
-    public static double TARGET_RED_X = 144;
-    public static double TARGET_RED_Y = 150;
+    public static final double RED_CORNER_X = 144;
+    public static final double RED_CORNER_Y = 150;
 
     public static double[] getDistanceXY(double x, double y) {
-        double dx, dy;
+        double goalX, goalY;
 
         if (Globals.alliance == Alliance.BLUE) {
-            dx = TARGET_BLUE_X - x;
-            dy = TARGET_BLUE_Y - y;
+            goalX = BLUE_CORNER_X;
+            goalY = BLUE_CORNER_Y;
         } else {
-            dx = TARGET_RED_X - x;
-            dy = TARGET_RED_Y - y;
+            goalX = RED_CORNER_X;
+            goalY = RED_CORNER_Y;
         }
 
-        return new double[]{dx, dy};
+        return new double[] {
+                goalX - x,
+                goalY - y
+        };
     }
 }
