@@ -49,6 +49,7 @@ public class Intake implements GreenSubsystem, Subsystem {
 
     public void spit(){
         intakeMotor.setPower(-1);
+        retractHardstop();
 
         state = State.SPIT;
     }
