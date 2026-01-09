@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.Range;
 
 @Config
 public class DrivePID {
-    public static double kPHeading = 2.05, kIHeading = 0.1, kDHeading = 1.88;
+    public static double kPHeading = 2.5, kIHeading = 0.18, kDHeading = 2;
 
     public PIDController headingController;
 
