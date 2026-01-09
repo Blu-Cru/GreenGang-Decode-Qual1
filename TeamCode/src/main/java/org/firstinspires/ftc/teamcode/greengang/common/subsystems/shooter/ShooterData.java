@@ -5,22 +5,26 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public class ShooterData {
 
-    public static final double A_VEL = 0.117893;
-    public static final double B_VEL = -3.26094;
-    public static final double C_VEL = 1592.80085;
+    public static final double A_VEL = 0.0193029;
+    public static final double B_VEL = 8.58623;
+    public static final double C_VEL = 1324.69907;
 
     //testing purposes
     public static boolean useLookupTable = true;
 
     public static double maxVelocity = 4000;
 
+    //last values are just random for max distance possible to shoot and soemthing high enough so that the robot is basically at power 1
     private static final double[] DISTANCES = {
-            14, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 150
+            14, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 170
     };
 
     private static final double[] VELOCITIES = {
             1600, 1575, 1575, 1575, 1600, 1625, 1650,
-            1800, 1800, 1850, 1900, 1875, 2000, 2100, maxVelocity
+            1800, 1800, 1850, 1900, 1875, 2000, 2100,
+            2250, 2300, 2450, 2505, 2545, 2610, 2750,
+            2600, 2650, 2710, 2785, 2850, 2900, 4000,
+
     };
 
     public static double lookupTable(double distance){

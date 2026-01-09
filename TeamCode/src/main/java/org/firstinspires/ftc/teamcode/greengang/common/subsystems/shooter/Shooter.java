@@ -118,6 +118,7 @@ public class Shooter implements GreenSubsystem, Subsystem {
 
     @Override
     public void telemetry(Telemetry tele){
+        tele.addData("State", state);
         tele.addData("velocity", velocity);
         tele.addData("target velocity", state == State.AUTO ? target : DEFAULT_VELOCITY);
     }

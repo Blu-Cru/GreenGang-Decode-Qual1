@@ -144,6 +144,6 @@ public class Drivetrain implements GreenSubsystem, Subsystem {
         telemetry.addData("y", pose.getY());
         telemetry.addData("Heading (deg)", Math.toDegrees(heading));
         telemetry.addData("Drivetrain Target", targetHeading);
-        telemetry.addData("Drivetrain Error", error);
+        telemetry.addData("Drivetrain Error", targetHeading - heading);
     }
 }

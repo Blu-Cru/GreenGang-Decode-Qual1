@@ -24,7 +24,7 @@ import org.firstinspires.ftc.teamcode.greengang.opmodes.GreenLinearOpMode;
 import org.firstinspires.ftc.teamcode.greengang.common.util.AprilTagMap;
 
 @Config
-@TeleOp(name = "BlueTele2", group = "TeleOp")
+@TeleOp(name = "SELECT THIS ONE OTHERWISE PLEASE BRO SELECT IT!!!!!!!!!!!! TELEOP", group = "TeleOp")
 public class Tele extends GreenLinearOpMode {
     Follower follower;
     Limelight3A limelight;
@@ -159,6 +159,7 @@ public class Tele extends GreenLinearOpMode {
 
                 .state(State.SPIT)
                 .onEnter(() -> {
+                    intake.retractHardstop();
                     shooter.setShooterState(Shooter.State.REVERSE);
                     intake.spit();
                 })

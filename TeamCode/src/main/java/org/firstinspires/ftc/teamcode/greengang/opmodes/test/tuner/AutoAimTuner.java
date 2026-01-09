@@ -14,9 +14,12 @@ import org.firstinspires.ftc.teamcode.greengang.opmodes.GreenLinearOpMode;
 public class AutoAimTuner extends GreenLinearOpMode {
     public static double target = 0;
     private boolean toggle = false;
+
+
     @Override
     public void initialize() {
         addShooter();
+        addIntake();
         addStickyG1();
     }
 
@@ -31,11 +34,11 @@ public class AutoAimTuner extends GreenLinearOpMode {
 
 
         if (toggle) {
-            new RetractHardstopCommand().schedule();
             shooter.setTargetVelocity(target);
+            intake.retractHardstop();
         } else{
-            new ExtendHardstopCommand().schedule();
             shooter.setShooterState(Shooter.State.IDLE);
+            intake.extendHardstop();
         }
 
         if(stickyG1.a){
@@ -47,6 +50,9 @@ public class AutoAimTuner extends GreenLinearOpMode {
             intake.in();
         } else{
             intake.stop();
+        }
+
+        if(stickyG1.a){
         }
     }
 }

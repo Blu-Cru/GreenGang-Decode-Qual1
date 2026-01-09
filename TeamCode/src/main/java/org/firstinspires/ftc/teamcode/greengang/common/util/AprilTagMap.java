@@ -6,7 +6,7 @@ public class AprilTagMap {
     public static double TARGET_BLUE_Y = 134;
 
     public static double TARGET_RED_X = 144;
-    public static double TARGET_RED_Y = 144;
+    public static double TARGET_RED_Y = 150;
 
     public static double[] getDistanceXY(double x, double y) {
         double dx, dy;
