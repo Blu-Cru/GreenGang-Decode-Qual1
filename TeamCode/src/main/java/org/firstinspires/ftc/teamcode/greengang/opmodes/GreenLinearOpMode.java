@@ -108,7 +108,7 @@ public abstract class GreenLinearOpMode extends LinearOpMode {
     public void initialize() {}
     public void initLoop() {}
     public void onStart() {}
-    public void periodic() {}
+    public void periodic() throws InterruptedException {}
     public void telemetry() {}
     public void end() {}
 

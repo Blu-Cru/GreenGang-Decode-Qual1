@@ -27,8 +27,8 @@ public class Globals {
     public static double voltage = 13.0;
 
     public static final double ROBOT_CENTER_TO_FRONT = 9;
-    public static final double GOAL_BACK_TO_FRONT_BLUE = 15;
-    public static final double GOAL_BACK_TO_FRONT_RED = 10;
+    public static final double GOAL_BACK_TO_FRONT_BLUE = 16.5;
+    public static final double GOAL_BACK_TO_FRONT_RED = 26.7;
 
     public static String frontLeft = "leftFront";
     public static String frontRight = "rightFront";

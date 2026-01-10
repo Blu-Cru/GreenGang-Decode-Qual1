@@ -98,24 +98,20 @@ public class Drivetrain implements GreenSubsystem, Subsystem {
     public void teleOpDrive(Gamepad gamepad1){
         double drive = -gamepad1.left_stick_y;
         double strafe = -gamepad1.left_stick_x;
-        double turn = 0;
+        double turn;
 
         if (Globals.autoAimEnabled) {
             double[] distances = AprilTagMap.getDistanceXY(pose.getX(), pose.getY());
-            
             double dx = distances[0];
             double dy = distances[1];
-            
             targetHeading = Math.atan2(dy, dx);
-
             turn = drivePID.getRotatePower(heading, targetHeading);
         } else {
-            turn = -gamepad1.right_stick_x;
-
+            turn = gamepad1.right_stick_x;
             drivePID.reset();
         }
 
-        drive(drive, -strafe, -turn, true);
+        drive(drive, -strafe, turn, true);
     }
 
     @Override

@@ -2,10 +2,10 @@ package org.firstinspires.ftc.teamcode.greengang.common.util;
 
 public class AprilTagMap {
     public static final double BLUE_CORNER_X = 0;
-    public static final double BLUE_CORNER_Y = 134;
+    public static final double BLUE_CORNER_Y = 142;
 
     public static final double RED_CORNER_X = 144;
-    public static final double RED_CORNER_Y = 150;
+    public static final double RED_CORNER_Y = 148;
 
     public static double[] getDistanceXY(double x, double y) {
         double goalX, goalY;

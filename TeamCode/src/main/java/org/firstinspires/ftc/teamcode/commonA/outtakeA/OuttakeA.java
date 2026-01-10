@@ -29,7 +29,7 @@ public class OuttakeA extends SubsystemBase{
     private final double KICKER_RETRACTED_POS = 0.8;
     private final double KICKER_FIRE_POS = 0.3;
     private double target_Vel = 0;
-    private double DEFAULT_VEL = 2200;
+    private double DEFAULT_VEL = 1500;
     public static double kP = 0.0025, kI = 0.005, kD = 0.0001, ff = 0.00037;
     public static double target, velocity = 0;
     PIDController controller;

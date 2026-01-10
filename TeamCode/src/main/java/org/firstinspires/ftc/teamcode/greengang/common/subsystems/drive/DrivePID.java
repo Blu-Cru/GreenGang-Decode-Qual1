@@ -6,29 +6,30 @@ import com.qualcomm.robotcore.util.Range;
 
 @Config
 public class DrivePID {
-    public static double kPHeading = 2.5, kIHeading = 0.18, kDHeading = 2;
+    public static double kPHeading = 2;
+    public static double kIHeading = 0.25;
+    public static double kDHeading = 0.14;
 
-    public PIDController headingController;
+    private final PIDController controller;
 
     public DrivePID() {
-        headingController = new PIDController(kPHeading, kIHeading, kDHeading);
+        controller = new PIDController(kPHeading, kIHeading, kDHeading);
     }
-    
+
     public void reset() {
-        headingController.reset();
+        controller.reset();
     }
 
     public double getRotatePower(double currentHeading, double targetHeading) {
-        headingController.setPID(kPHeading, kIHeading, kDHeading);
+        controller.setPID(kPHeading, kIHeading, kDHeading);
 
-        double error = angleWrap(angleWrap(targetHeading) - currentHeading);
-        double output = headingController.calculate(0, error);
+        double error = angleWrap(targetHeading - currentHeading);
+        double output = controller.calculate(error, 0);
 
-        return Range.clip(output, -1, 1);
+        return Range.clip(output, -1.0, 1.0);
     }
 
-    // https://www.ctrlaltftc.com/practical-examples/controlling-heading
-    public double angleWrap(double radians) {
+    private double angleWrap(double radians) {
         while (radians > Math.PI) radians -= 2 * Math.PI;
         while (radians < -Math.PI) radians += 2 * Math.PI;
         return radians;
