@@ -56,8 +56,6 @@ public class Shooter implements GreenSubsystem, Subsystem {
         flywheel2.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
         hoodServo.setPosition(DEFAULT_HOOD_POSITION);
-
-        startFlywheel();
     }
 
     public void increaseVelocity(double increment){
