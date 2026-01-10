@@ -3,13 +3,16 @@ import android.util.Log;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.canvas.Canvas;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+@Config
 public class Globals {
     public static HardwareMap hwMap; // global reference to current hwmap
     public static Telemetry tele; // global reference to current telemetry
@@ -18,10 +21,24 @@ public class Globals {
     public static Alliance alliance = Alliance.RED;
     public static ElapsedTime runtime;
 
+    public static Pose startPose = new Pose(21, 135, Math.toRadians(180));
+
     public static boolean fieldCentric = true;
     public static boolean autoAimEnabled = false;
 
     public static double voltage = 13.0;
+
+    public static double ROBOT_CENTER_TO_FRONT = 9;
+    public static double GOAL_BACK_TO_FRONT_BLUE = 12.25;
+    public static double GOAL_BACK_TO_FRONT_RED = 16.23;
+
+    public static Pose relocalizeBlue = new Pose(135, 9, 0);
+    public static Pose relocalizeRed = new Pose(9, 9, 180);
+
+    public static String frontLeft = "leftFront";
+    public static String frontRight = "rightFront";
+    public static String backLeft = "leftBack";
+    public static String backRight = "rightBack";
 
     public static void setAlliance(Alliance alliance) {
         Globals.alliance = alliance;

@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.commonA.drivetrainA.DrivetrainA;
+import org.firstinspires.ftc.teamcode.greengang.common.subsystems.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.commonA.outtakeA.OuttakeA;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 @TeleOp(name = "Sniper_Manual_Tuner", group = "TeleOp")
 public class AutoAimTester extends OpMode {
 
-    private DrivetrainA drivetrain;
+    private Drivetrain drivetrain;
     private OuttakeA outtake;
     private Follower follower;
     private Limelight3A limelight;
@@ -47,7 +47,7 @@ public class AutoAimTester extends OpMode {
         batterySensor = hardwareMap.voltageSensor.iterator().next();
 
         follower.setStartingPose(new Pose(45, 120, Math.toRadians(180)));
-        drivetrain = new DrivetrainA(hardwareMap);
+        drivetrain = new Drivetrain(hardwareMap);
         limelight.start();
     }
 

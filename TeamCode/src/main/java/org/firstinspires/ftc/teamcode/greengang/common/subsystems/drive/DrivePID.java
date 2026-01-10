@@ -6,37 +6,30 @@ import com.qualcomm.robotcore.util.Range;
 
 @Config
 public class DrivePID {
+    public static double kPHeading = 2;
+    public static double kIHeading = 0.25;
+    public static double kDHeading = 0.14;
 
-    public static double kPHeading = 0, kIHeading = 0, kDHeading = 0;
-
-    private PIDController headingController;
-    private double targetHeading;
+    private final PIDController controller;
 
     public DrivePID() {
-        headingController = new PIDController(kPHeading, kIHeading, kDHeading);
-        targetHeading = 0;
+        controller = new PIDController(kPHeading, kIHeading, kDHeading);
     }
 
-    public void setTargetHeading(double target) {
-        targetHeading = angleWrap(target);
-        headingController.setSetPoint(0);
-    }
-    
     public void reset() {
-        headingController.reset();
+        controller.reset();
     }
 
-    public double getRotatePower(double currentHeading) {
-        headingController.setPID(kPHeading, kIHeading, kDHeading);
+    public double getRotatePower(double currentHeading, double targetHeading) {
+        controller.setPID(kPHeading, kIHeading, kDHeading);
 
-        double error = angleWrap(targetHeading - angleWrap(currentHeading));
-        double output = headingController.calculate(error, 0);
+        double error = angleWrap(targetHeading - currentHeading);
+        double output = controller.calculate(error, 0);
 
-        return Range.clip(output, -1, 1);
+        return Range.clip(output, -1.0, 1.0);
     }
 
-    // https://www.ctrlaltftc.com/practical-examples/controlling-heading
-    public double angleWrap(double radians) {
+    private double angleWrap(double radians) {
         while (radians > Math.PI) radians -= 2 * Math.PI;
         while (radians < -Math.PI) radians += 2 * Math.PI;
         return radians;

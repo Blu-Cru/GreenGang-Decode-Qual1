@@ -1,11 +1,29 @@
 package org.firstinspires.ftc.teamcode.greengang.common.util;
 
-public class AprilTagMap {
-    //blue
-    public static final double TAG20_X = -1.4827;
-    public static final double TAG20_Y = -1.4133;
+import com.acmerobotics.dashboard.config.Config;
 
-    //red
-    public static final double TAG24_X = -1.4827;
-    public static final double TAG24_Y =  1.4133;
+@Config
+public class AprilTagMap {
+    public static double BLUE_CORNER_X = 0;
+    public static double BLUE_CORNER_Y = 134;
+
+    public static double RED_CORNER_X = 134;
+    public static double RED_CORNER_Y = 144;
+
+    public static double[] getDistanceXY(double x, double y) {
+        double goalX, goalY;
+
+        if (Globals.alliance == Alliance.BLUE) {
+            goalX = BLUE_CORNER_X;
+            goalY = BLUE_CORNER_Y;
+        } else {
+            goalX = RED_CORNER_X;
+            goalY = RED_CORNER_Y;
+        }
+
+        return new double[] {
+                goalX - x,
+                goalY - y
+        };
+    }
 }

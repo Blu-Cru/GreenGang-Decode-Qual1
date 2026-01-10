@@ -16,7 +16,7 @@ public class Robot {
 
     // all subsystems
     public Drivetrain drivetrain;
-    public Shooter sh;
+    public Shooter shooter;
     public Intake intake;
     public Kicker kicker;
 
@@ -52,10 +52,10 @@ public class Robot {
 //    }
 
     public Shooter addShooter(){
-        sh = new Shooter(hardwareMap);
-        subsystems.add(sh);
+        shooter = new Shooter(hardwareMap);
+        subsystems.add(shooter);
 
-        return sh;
+        return shooter;
     }
 
     public Intake addIntake(){

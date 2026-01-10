@@ -1,14 +1,14 @@
-package org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter;
+package org.firstinspires.ftc.teamcode.greengang.common.commands.controls.spit;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 
 import org.firstinspires.ftc.teamcode.greengang.common.util.Robot;
 
-public class StopLiftingBallCommand extends InstantCommand {
-    public StopLiftingBallCommand(){
+public class SpitCommand extends InstantCommand {
+    public SpitCommand() {
         super(
                 () -> {
-                    Robot.getInstance().intake.stopLift();
+                    Robot.getInstance().intake.spit();
                 }
         );
 

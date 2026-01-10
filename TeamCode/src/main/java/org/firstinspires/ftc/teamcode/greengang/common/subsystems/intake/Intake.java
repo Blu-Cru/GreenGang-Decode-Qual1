@@ -15,17 +15,14 @@ public class Intake implements GreenSubsystem, Subsystem {
         IDLE,
         IN,
         SPIT,
-        LIFT,
     }
 
     public State state;
 
     DcMotorEx intakeMotor;
-    CRServo liftServo;
     Servo hardstop;
 
     public Intake(HardwareMap hardwareMap){
-        liftServo = hardwareMap.get(CRServo.class, "lift");
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intake");
         hardstop = hardwareMap.get(Servo.class, "hardstop");
 
@@ -41,36 +38,21 @@ public class Intake implements GreenSubsystem, Subsystem {
     }
 
     public void stop(){
-        liftServo.setPower(0);
         intakeMotor.setPower(0);
         state = State.IDLE;
     }
 
     public void in(){
-        liftServo.setPower(1);
         intakeMotor.setPower(1);
 
         state = State.IN;
     }
 
     public void spit(){
-        liftServo.setPower(-1);
         intakeMotor.setPower(-1);
+        retractHardstop();
 
         state = State.SPIT;
-    }
-
-    public void lift(){
-        liftServo.setPower(1);
-        intakeMotor.setPower(0);
-
-        state = State.LIFT;
-    }
-
-    public void stopLift(){
-        liftServo.setPower(0);
-
-        state = State.IDLE;
     }
 
     public void extendHardstop(){

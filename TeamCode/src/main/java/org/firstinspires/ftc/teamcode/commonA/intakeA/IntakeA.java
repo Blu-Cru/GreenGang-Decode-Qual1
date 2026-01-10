@@ -56,4 +56,3 @@ public class IntakeA extends SubsystemBase {
 
 }
 
-

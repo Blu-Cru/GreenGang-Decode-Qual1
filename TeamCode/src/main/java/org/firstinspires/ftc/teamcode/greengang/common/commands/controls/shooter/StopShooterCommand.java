@@ -8,10 +8,10 @@ public class StopShooterCommand extends InstantCommand {
     public StopShooterCommand(){
         super(
                 () -> {
-                    Robot.getInstance().sh.stop();
+                    Robot.getInstance().shooter.stop();
                 }
         );
 
-        addRequirements(Robot.getInstance().sh);
+        addRequirements(Robot.getInstance().shooter);
     }
 }
