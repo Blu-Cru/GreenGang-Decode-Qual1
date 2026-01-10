@@ -1,5 +1,4 @@
-
-package org.firstinspires.ftc.teamcode.greengang.opmodes.auto.Blue;
+package org.firstinspires.ftc.teamcode.greengang.opmodes.auto.Red;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
@@ -13,10 +12,11 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.commonA.intakeA.IntakeA;
 import org.firstinspires.ftc.teamcode.commonA.outtakeA.OuttakeA;
 import org.firstinspires.ftc.teamcode.greengang.GlobalsStorage.Storage;
+import org.firstinspires.ftc.teamcode.greengang.opmodes.auto.Blue.Blue12BallGate;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "Blue Auto 12 Ball")
-public class Blue12BallGate extends OpMode {
+@Autonomous(name = "Red Auto 12 Ball")
+public class Red12BallGate extends OpMode {
     private IntakeA intake;
     private OuttakeA outtake;
     private Follower follower;
@@ -33,24 +33,22 @@ public class Blue12BallGate extends OpMode {
 
     PathState pathState;
 
-    // --- POSES ---
-    private final Pose startPose = new Pose(18, 120, Math.toRadians(144));
-    private final Pose shootPose = new Pose(46.5, 97, Math.toRadians(142));
+    // --- MIRRORED POSES ---
+    private final Pose startPose = new Pose(126, 120, Math.toRadians(36));
+    private final Pose shootPose = new Pose(97.5, 97, Math.toRadians(38));
 
-    // Parking Position
-    private final Pose parkPose = new Pose(21, 105, Math.toRadians(135));
+    private final Pose parkPose = new Pose(123, 105, Math.toRadians(45));
 
-    private final Pose spike1Entry = new Pose(33, 84, Math.toRadians(0));
-    private final Pose spike1PickUp = new Pose(16, 83.3, Math.toRadians(180));
-    private final Pose spike1Clearance = new Pose(12.2, 77, Math.toRadians(90));
+    private final Pose spike1Entry = new Pose(111, 84, Math.toRadians(180));
+    private final Pose spike1PickUp = new Pose(128, 83.3, Math.toRadians(0));
+    private final Pose spike1Clearance = new Pose(131.8, 77, Math.toRadians(87));
 
-    private final Pose spike2Entry = new Pose(33, 57, Math.toRadians(180));
-    private final Pose spike2PickUp = new Pose(8, 57, Math.toRadians(180));
+    private final Pose spike2Entry = new Pose(111, 57, Math.toRadians(0));
+    private final Pose spike2PickUp = new Pose(136, 57, Math.toRadians(0));
 
-    private final Pose spike3Entry = new Pose(33, 36, Math.toRadians(180));
-    private final Pose spike3PickUp = new Pose(8, 36, Math.toRadians(180));
+    private final Pose spike3Entry = new Pose(111, 36, Math.toRadians(0));
+    private final Pose spike3PickUp = new Pose(136, 36, Math.toRadians(0));
 
-    // --- PATHS ---
     private PathChain startToShoot, shootToSpike, spikeToShoot, shootToPark;
 
     double start_shoot_time = 0.02;
@@ -63,9 +61,8 @@ public class Blue12BallGate extends OpMode {
                 .setLinearHeadingInterpolation(startPose.getHeading(), shootPose.getHeading())
                 .build();
 
-        // Park Path
         shootToPark = follower.pathBuilder()
-                .addPath(new BezierCurve(shootPose, new Pose(60, 97, Math.toRadians(90)), parkPose))
+                .addPath(new BezierCurve(shootPose, new Pose(84, 97, Math.toRadians(90)), parkPose))
                 .setLinearHeadingInterpolation(shootPose.getHeading(), parkPose.getHeading())
                 .build();
     }
@@ -73,37 +70,37 @@ public class Blue12BallGate extends OpMode {
     public void buildSpikePath(int count) {
         if (count == 1) {
             shootToSpike = follower.pathBuilder()
-                    .addPath(new BezierCurve(shootPose, new Pose(60, 84, Math.toRadians(180)), spike1Entry))
-                    .setLinearHeadingInterpolation(shootPose.getHeading(), Math.toRadians(180))
+                    .addPath(new BezierCurve(shootPose, new Pose(84, 84, Math.toRadians(0)), spike1Entry))
+                    .setLinearHeadingInterpolation(shootPose.getHeading(), Math.toRadians(0))
                     .addPath(new BezierLine(spike1Entry, spike1PickUp))
-                    .setConstantHeadingInterpolation(Math.toRadians(180))
+                    .setConstantHeadingInterpolation(Math.toRadians(0))
                     .build();
 
             spikeToShoot = follower.pathBuilder()
-                    .addPath(new BezierCurve(spike1PickUp,new Pose(26, 83), spike1Clearance))
-                    .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(93))
+                    .addPath(new BezierCurve(spike1PickUp, new Pose(118, 83), spike1Clearance))
+                    .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(87))
                     .addPath(new BezierCurve(
                             spike1Clearance,
-                            new Pose(25.3, 83.5),
-                            new Pose(48, 86, Math.toRadians(148)),
+                            new Pose(118.7, 83.5),
+                            new Pose(96, 86, Math.toRadians(32)),
                             shootPose
                     ))
-                    .setLinearHeadingInterpolation(Math.toRadians(93), shootPose.getHeading())
+                    .setLinearHeadingInterpolation(Math.toRadians(87), shootPose.getHeading())
                     .build();
         } else {
             Pose entry = (count == 2) ? spike2Entry : spike3Entry;
             Pose pickup = (count == 2) ? spike2PickUp : spike3PickUp;
 
             shootToSpike = follower.pathBuilder()
-                    .addPath(new BezierCurve(shootPose, new Pose(60, entry.getY(), Math.toRadians(180)), entry))
-                    .setLinearHeadingInterpolation(shootPose.getHeading(), Math.toRadians(180))
+                    .addPath(new BezierCurve(shootPose, new Pose(84, entry.getY(), Math.toRadians(0)), entry))
+                    .setLinearHeadingInterpolation(shootPose.getHeading(), Math.toRadians(0))
                     .addPath(new BezierLine(entry, pickup))
-                    .setConstantHeadingInterpolation(Math.toRadians(180))
+                    .setConstantHeadingInterpolation(Math.toRadians(0))
                     .build();
 
             spikeToShoot = follower.pathBuilder()
-                    .addPath(new BezierCurve(pickup, new Pose(62, 81, Math.toRadians(142)), shootPose))
-                    .setLinearHeadingInterpolation(Math.toRadians(180), shootPose.getHeading())
+                    .addPath(new BezierCurve(pickup, new Pose(82, 81, Math.toRadians(38)), shootPose))
+                    .setLinearHeadingInterpolation(Math.toRadians(0), shootPose.getHeading())
                     .build();
         }
     }
@@ -111,12 +108,12 @@ public class Blue12BallGate extends OpMode {
     public void statePathUpdate() {
         switch (pathState) {
             case PRELOAD:
-                intake.setIntakeState(IntakeA.IntakeState.INTAKE_IN);
                 if (pathTimer.getElapsedTimeSeconds() < 0.1) {
                     follower.followPath(startToShoot, true);
                     outtake.setHoodPosition(0.022);
                 }
-                if (follower.getPose().getX() > 44.5 || !follower.isBusy()) {
+                // MIRRORED LOGIC: Check if X is less than shoot target
+                if (follower.getPose().getX() < 99.5 || !follower.isBusy()) {
                     setPathState(PathState.SHOOT);
                 }
                 break;
@@ -125,14 +122,14 @@ public class Blue12BallGate extends OpMode {
                 outtake.setOuttakeState(OuttakeA.OuttakeState.SPIN_UP);
                 outtake.setTarget_Vel(1600);
 
-               if (pathTimer.getElapsedTimeSeconds() >= start_shoot_time + 1.9) {
+                if (pathTimer.getElapsedTimeSeconds() >= start_shoot_time + 1.9) {
                     outtake.setOuttakeState(OuttakeA.OuttakeState.REV);
                     spikeCount++;
                     if (spikeCount <= 3) {
                         buildSpikePath(spikeCount);
-                        setPathState(PathState.GET_SPIKE);
+                        setPathState(Red12BallGate.PathState.GET_SPIKE);
                     } else {
-                        setPathState(PathState.PARK);
+                        setPathState(Red12BallGate.PathState.PARK);
                     }
                 }
                 break;
@@ -142,7 +139,8 @@ public class Blue12BallGate extends OpMode {
                     follower.followPath(shootToSpike, false);
                     intake.setIntakeState(IntakeA.IntakeState.INTAKE_IN);
                 }
-                if (follower.getPose().getX() < 17 || !follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 3) {
+                // MIRRORED LOGIC: Check if X is greater than pickup target
+                if (follower.getPose().getX() > 126.5 || !follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 2.5) {
                     setPathState(PathState.GO_TO_SHOOT);
                 }
                 break;
@@ -150,17 +148,15 @@ public class Blue12BallGate extends OpMode {
             case GO_TO_SHOOT:
                 if (pathTimer.getElapsedTimeSeconds() < 0.3) {
                     follower.followPath(spikeToShoot, true);
-                    telemetry.addLine("going to shoot path");
                 }
                 else {
-                    double triggerX = (spikeCount == 1) ? 46.0 : 45.5;
+                    // MIRRORED LOGIC: trigger value is 144 - triggerX
+                    double triggerX = (spikeCount == 1) ? 98.0 : 100.5;
 
-                    if (follower.getPose().getX() > triggerX || !follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 4.0) {
+                    if (follower.getPose().getX() < triggerX || !follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 4.0) {
                         setPathState(PathState.SHOOT);
                     }
                 }
-
-
                 break;
 
             case PARK:
@@ -169,9 +165,9 @@ public class Blue12BallGate extends OpMode {
                     outtake.setOuttakeState(OuttakeA.OuttakeState.OFF);
                     intake.setIntakeState(IntakeA.IntakeState.IDLE);
                 }
-                /*if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 3.0) {
+                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 3.0) {
                     setPathState(PathState.END);
-                }*/
+                }
                 break;
 
             case END:
@@ -221,7 +217,7 @@ public class Blue12BallGate extends OpMode {
     }
     @Override
     public void stop() {
-        Storage.isRed=false;
+        Storage.isRed=true;
         Storage.lastPose = follower.getPose();
     }
 }

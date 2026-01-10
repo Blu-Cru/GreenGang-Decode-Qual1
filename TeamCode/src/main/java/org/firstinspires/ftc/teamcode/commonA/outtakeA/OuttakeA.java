@@ -122,13 +122,7 @@ public class OuttakeA extends SubsystemBase{
                 m_kicker.setPosition(KICKER_RETRACTED_POS);
                 m_stop.setPosition(1);
                 break;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> Stashed changes
 
->>>>>>> Stashed changes
             case SPIN_UP:
                 runFlywheelPID();
 

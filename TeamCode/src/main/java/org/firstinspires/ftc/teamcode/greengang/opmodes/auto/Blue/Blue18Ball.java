@@ -18,8 +18,8 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import java.util.Objects;
 
 
-@Autonomous(name = "Auto Blue 15 Ball")
-public class Blue15Ball extends OpMode {
+@Autonomous(name = "Auto Blue 18 Ball")
+public class Blue18Ball extends OpMode {
     public static class Paths {
 
         public PathChain Preload;
@@ -264,7 +264,7 @@ public class Blue15Ball extends OpMode {
                     } else if (Objects.equals(prevState, "GetSpike2")) {
                         setPathState(PathState.GET_GATE_CYCLE);
                     } else if (Objects.equals(prevState, "GetGateCycle1") && gateCount==1) {
-                        setPathState(PathState.GET_SPIKE1);
+                        setPathState(PathState.GET_GATE_CYCLE);
 
                     } else if (Objects.equals(prevState, "GetGateCycle1") && gateCount==2) {
                         setPathState(PathState.GET_SPIKE1);
@@ -309,12 +309,12 @@ public class Blue15Ball extends OpMode {
                 if (follower.getPose().getX()<33 && follower.getPose().getX()>9.3) {
                     follower.setMaxPower(0.7);
                 }
-                if (pathTimer.getElapsedTimeSeconds()>3.7 && gateCount==1) {
+                if (pathTimer.getElapsedTimeSeconds()>3.5 && gateCount==1) {
                     follower.setMaxPower(1.0);
                     gateCount+=1;
                     setPathState(PathState.GATE_CYCLE_SHOOT);
                 }
-                if (pathTimer.getElapsedTimeSeconds()>4 && gateCount==0|| pathTimer.getElapsedTimeSeconds()>7) {
+                if (pathTimer.getElapsedTimeSeconds()>3.5 && gateCount==0|| pathTimer.getElapsedTimeSeconds()>7) {
                     follower.setMaxPower(1.0);
                     gateCount+=1;
                     setPathState(PathState.GATE_CYCLE_SHOOT);
