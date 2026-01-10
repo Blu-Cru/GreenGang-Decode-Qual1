@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode.greengang.common.util;
 
-public class AprilTagMap {
-    public static final double BLUE_CORNER_X = 0;
-    public static final double BLUE_CORNER_Y = 142;
+import com.acmerobotics.dashboard.config.Config;
 
-    public static final double RED_CORNER_X = 144;
-    public static final double RED_CORNER_Y = 148;
+@Config
+public class AprilTagMap {
+    public static double BLUE_CORNER_X = 0;
+    public static double BLUE_CORNER_Y = 134;
+
+    public static double RED_CORNER_X = 134;
+    public static double RED_CORNER_Y = 144;
 
     public static double[] getDistanceXY(double x, double y) {
         double goalX, goalY;

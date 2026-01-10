@@ -3,6 +3,7 @@ import android.util.Log;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.canvas.Canvas;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.pedropathing.geometry.Pose;
@@ -11,6 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+@Config
 public class Globals {
     public static HardwareMap hwMap; // global reference to current hwmap
     public static Telemetry tele; // global reference to current telemetry
@@ -26,9 +28,9 @@ public class Globals {
 
     public static double voltage = 13.0;
 
-    public static final double ROBOT_CENTER_TO_FRONT = 9;
-    public static final double GOAL_BACK_TO_FRONT_BLUE = 16.5;
-    public static final double GOAL_BACK_TO_FRONT_RED = 26.7;
+    public static double ROBOT_CENTER_TO_FRONT = 9;
+    public static double GOAL_BACK_TO_FRONT_BLUE = 12.25;
+    public static double GOAL_BACK_TO_FRONT_RED = 16.23;
 
     public static String frontLeft = "leftFront";
     public static String frontRight = "rightFront";
