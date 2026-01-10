@@ -1,9 +1,13 @@
 package org.firstinspires.ftc.teamcode.greengang.common.subsystems.drive;
 
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.arcrobotics.ftclib.command.Subsystem;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -11,10 +15,14 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.greengang.common.util.AprilTagMap;
 import org.firstinspires.ftc.teamcode.greengang.common.util.GreenSubsystem;
 import org.firstinspires.ftc.teamcode.greengang.common.util.Globals;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+
+import java.util.List;
 
 public class Drivetrain implements GreenSubsystem, Subsystem {
     public Follower follower;
@@ -25,18 +33,20 @@ public class Drivetrain implements GreenSubsystem, Subsystem {
     public DcMotorEx backLeft;
     public DcMotorEx backRight;
 
+    public Limelight3A limelight;
+
     public Pose pose;
     public double heading;
 
-
     double targetHeading = 0;
-    double error = 0;
 
     public Drivetrain(HardwareMap hardwareMap) {
         frontLeft = hardwareMap.get(DcMotorEx.class, Globals.frontLeft);
         backLeft = hardwareMap.get(DcMotorEx.class, Globals.backLeft);
         frontRight = hardwareMap.get(DcMotorEx.class, Globals.frontRight);
         backRight = hardwareMap.get(DcMotorEx.class, Globals.backRight);
+
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -112,6 +122,38 @@ public class Drivetrain implements GreenSubsystem, Subsystem {
         }
 
         drive(drive, -strafe, turn, true);
+    }
+
+    public void limelightRelocalize() {
+        LLResult result = limelight.getLatestResult();
+
+        if (result != null && result.isValid()) {
+            List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
+
+            boolean foundValidTag = false;
+            for (LLResultTypes.FiducialResult f : fiducials) {
+                if (f.getFiducialId() == 20 || f.getFiducialId() == 24) {
+                    foundValidTag = true;
+                    break;
+                }
+            }
+
+            if (foundValidTag) {
+                Pose3D botPose = result.getBotpose();
+
+                if (botPose != null) {
+                    double x = botPose.getPosition().x * 39.3701;
+                    double y = botPose.getPosition().y * 39.3701;
+                    double h = botPose.getOrientation().getYaw(AngleUnit.RADIANS);
+
+                    relocalize(new Pose(x, y, h + Math.toRadians(90)));
+                }
+            }
+        }
+    }
+
+    public void relocalize(Pose p){
+        follower.setPose(p);
     }
 
     @Override

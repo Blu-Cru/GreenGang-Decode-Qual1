@@ -210,6 +210,14 @@ public class Tele extends GreenLinearOpMode {
             if (gamepad1.dpad_left || gamepad2.dpad_left) shooter.decreaseVelocity(5);
             else if (gamepad1.dpad_right || gamepad2.dpad_right) shooter.increaseVelocity(5);
         }
+
+        if(stickyG2.right_bumper && stickyG2.left_bumper){
+            if(Globals.alliance == Alliance.RED){
+                drivetrain.relocalize(Globals.relocalizeRed);
+            } else {
+                drivetrain.relocalize(Globals.relocalizeBlue);
+            }
+        }
     }
 
     @Override
@@ -217,7 +225,5 @@ public class Tele extends GreenLinearOpMode {
         tele.addData("State", state);
         tele.addData("Lock", Globals.autoAimEnabled ? "ON" : "START");
         tele.addData("Target Distance", targetDistance);
-        tele.addData("X,Y", drivetrain.pose.getX() + "," + drivetrain.pose.getY());
-
     }
 }

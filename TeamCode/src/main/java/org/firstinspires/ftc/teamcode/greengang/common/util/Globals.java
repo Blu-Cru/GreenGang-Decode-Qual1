@@ -21,7 +21,7 @@ public class Globals {
     public static Alliance alliance = Alliance.RED;
     public static ElapsedTime runtime;
 
-    public static Pose startPose = new Pose(45, 120, Math.toRadians(180));
+    public static Pose startPose = new Pose(21, 135, Math.toRadians(180));
 
     public static boolean fieldCentric = true;
     public static boolean autoAimEnabled = false;
@@ -31,6 +31,9 @@ public class Globals {
     public static double ROBOT_CENTER_TO_FRONT = 9;
     public static double GOAL_BACK_TO_FRONT_BLUE = 12.25;
     public static double GOAL_BACK_TO_FRONT_RED = 16.23;
+
+    public static Pose relocalizeBlue = new Pose(135, 9, 0);
+    public static Pose relocalizeRed = new Pose(9, 9, 180);
 
     public static String frontLeft = "leftFront";
     public static String frontRight = "rightFront";
