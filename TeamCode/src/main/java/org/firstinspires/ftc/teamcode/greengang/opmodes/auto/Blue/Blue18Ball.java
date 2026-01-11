@@ -35,12 +35,12 @@ public class Blue18Ball extends OpMode {
         public Pose startPose = new Pose(18, 120, Math.toRadians(144));
         public Pose shootPose = new Pose(46.500, 97.000, Math.toRadians(142));
         public Pose spike2Entry = new Pose(41.190, 60, Math.toRadians(180));
-        public Pose spike2PickUp = new Pose(9.23, 58.4, Math.toRadians(182));
+        public Pose spike2PickUp = new Pose(9.32, 58.2, Math.toRadians(182));
         public Pose gateCycle = new Pose(8.9, 57.6, Math.toRadians(154.2));
         public Pose spike1Entry = new Pose(42, 84, Math.toRadians(180));
-        public Pose spike1PickUp = new Pose(13.9, 84, Math.toRadians(181));
+        public Pose spike1PickUp = new Pose(14.3, 84, Math.toRadians(181));
         public Pose spike3Entry = new Pose(40.271, 36, Math.toRadians(180));
-        public Pose spike3PickUp = new Pose(9, 34.7, Math.toRadians(182));
+        public Pose spike3PickUp = new Pose(9.5, 34.7, Math.toRadians(182));
         public Pose parkPose = new Pose(21, 100, Math.toRadians(135));
 
 
