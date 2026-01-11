@@ -26,12 +26,12 @@ public class Red15Ball extends OpMode {
         // X reflected (144 - x), Y same, Heading reflected (180 - theta)
         public Pose startPose = new Pose(126, 120, Math.toRadians(36));
         public Pose shootPose = new Pose(97.5, 97.0, Math.toRadians(38));
-        public Pose spike2Entry = new Pose(102.81, 60, Math.toRadians(0));
-        public Pose spike2PickUp = new Pose(134.77, 58, Math.toRadians(-2));
+        public Pose spike2Entry = new Pose(102.81, 56, Math.toRadians(0));
+        public Pose spike2PickUp = new Pose(134.77, 54.5, Math.toRadians(0));
         public Pose gateCycle = new Pose(135.1, 57.6, Math.toRadians(24.8));
         public Pose spike1Entry = new Pose(102, 84, Math.toRadians(0));
         public Pose spike1PickUp = new Pose(130.1, 83.7, Math.toRadians(-1));
-        public Pose spike3Entry = new Pose(103.729, 36, Math.toRadians(0));
+        public Pose spike3Entry = new Pose(85, 36, Math.toRadians(0));
         public Pose spike3PickUp = new Pose(135, 34.2, Math.toRadians(-2));
         public Pose parkPose = new Pose(123, 100, Math.toRadians(45));
 

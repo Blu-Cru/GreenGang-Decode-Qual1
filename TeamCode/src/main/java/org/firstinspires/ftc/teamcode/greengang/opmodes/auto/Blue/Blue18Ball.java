@@ -33,7 +33,7 @@ public class Blue18Ball extends OpMode {
         public PathChain Spike3ToShoot;
         public PathChain Park;
         public Pose startPose = new Pose(18, 120, Math.toRadians(144));
-        public Pose shootPose = new Pose(46.500, 97.000, Math.toRadians(142));
+        public Pose shootPose = new Pose(46.500, 97.000, Math.toRadians(143.5));
         public Pose spike2Entry = new Pose(41.190, 60, Math.toRadians(180));
         public Pose spike2PickUp = new Pose(9.32, 58.2, Math.toRadians(182));
         public Pose gateCycle = new Pose(8.9, 57.6, Math.toRadians(154.2));

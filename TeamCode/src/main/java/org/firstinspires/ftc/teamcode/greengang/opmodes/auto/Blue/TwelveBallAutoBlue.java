@@ -1,3 +1,4 @@
+/*
 package org.firstinspires.ftc.teamcode.greengang.opmodes.auto.Blue;
 
 import com.acmerobotics.roadrunner.Action;
@@ -164,3 +165,4 @@ public class TwelveBallAutoBlue extends GreenLinearOpMode {
         tele.addData("heading (deg)", Math.toDegrees(p.heading.toDouble()));
     }
 }
+*/
