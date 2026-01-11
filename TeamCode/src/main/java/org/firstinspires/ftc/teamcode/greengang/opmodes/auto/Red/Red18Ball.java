@@ -36,10 +36,10 @@ public class Red18Ball extends OpMode {
         public Pose spike2Entry = new Pose(144 - 60, 59.5, Math.toRadians(180 - 180));
         public Pose spike2PickUp = new Pose(144 - 9.32, 57.13, Math.toRadians(180 - 180));
         public Pose gateCycle = new Pose(144 - 9.6, 57.9, Math.toRadians(180 - 154.3));
-        public Pose spike1Entry = new Pose(144 - 60, 86, Math.toRadians(180 - 180));
-        public Pose spike1PickUp = new Pose(144 - 14.3, 87.5, Math.toRadians(180 - 180));
-        public Pose spike3Entry = new Pose(85, 4, Math.toRadians(0));
-        public Pose spike3PickUp = new Pose(135, 40.2, Math.toRadians(-2));
+        public Pose spike1Entry = new Pose(144 - 60, 85.5, Math.toRadians(180 - 180));
+        public Pose spike1PickUp = new Pose(144 - 14.3, 87, Math.toRadians(180 - 180));
+        public Pose spike3Entry = new Pose(85, 41.4, Math.toRadians(0));
+        public Pose spike3PickUp = new Pose(135, 38.7, Math.toRadians(-2));
         public Pose parkPose = new Pose(144 - 21, 95, Math.toRadians(180 - 135));
 
 
@@ -248,7 +248,7 @@ public class Red18Ball extends OpMode {
                     follower.followPath(paths.ShootToSpike2, true);
 
                 }
-                if (follower.getPose().getX() > (144 - 25.7) || pathTimer.getElapsedTimeSeconds()>4) {
+                if (follower.getPose().getX() > (144 - 27) || pathTimer.getElapsedTimeSeconds()>4) {
                     follower.setMaxPower(1.0);
                     setPathState(PathState.SPIKE2_SHOOT);
                 }
@@ -302,7 +302,7 @@ public class Red18Ball extends OpMode {
                 if (follower.getPose().getX() > (144 - 43.5)) {
                     follower.setMaxPower(0.65);
                 }
-                if (follower.getPose().getX() > (144 - 28) || pathTimer.getElapsedTimeSeconds()>4) {
+                if (follower.getPose().getX() > (144 - 29.2) || pathTimer.getElapsedTimeSeconds()>4) {
                     follower.setMaxPower(1.0);
                     setPathState(PathState.SPIKE1_SHOOT);
                 }
@@ -322,7 +322,7 @@ public class Red18Ball extends OpMode {
                     follower.followPath(paths.ShootToSpike3, true);
 
                 }
-                if (follower.getPose().getX() > (144 - 25.8) || pathTimer.getElapsedTimeSeconds()>4) {
+                if (follower.getPose().getX() > (144 - 29) || pathTimer.getElapsedTimeSeconds()>4) {
                     setPathState(PathState.SPIKE3_SHOOT);
                 }
                 break;
@@ -331,7 +331,7 @@ public class Red18Ball extends OpMode {
                 if (pathTimer.getElapsedTimeSeconds() < 0.1) {
                     follower.followPath(paths.Spike3ToShoot);
                 }
-                if (follower.getPose().getX() < (144 - 46) || pathTimer.getElapsedTimeSeconds()>4) {
+                if (follower.getPose().getX() < (144 - 48) || pathTimer.getElapsedTimeSeconds()>4) {
                     setPathState(PathState.SHOOT);
                 }
                 break;
