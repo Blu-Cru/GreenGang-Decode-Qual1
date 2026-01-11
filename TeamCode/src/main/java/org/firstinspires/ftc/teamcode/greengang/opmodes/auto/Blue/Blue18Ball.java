@@ -9,17 +9,29 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commonA.intakeA.IntakeA;
 import org.firstinspires.ftc.teamcode.commonA.outtakeA.OuttakeA;
 import org.firstinspires.ftc.teamcode.greengang.GlobalsStorage.Storage;
+import org.firstinspires.ftc.teamcode.greengang.common.util.Alliance;
+import org.firstinspires.ftc.teamcode.greengang.common.util.Globals;
+import org.firstinspires.ftc.teamcode.greengang.opmodes.GreenLinearOpMode;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import java.util.Objects;
 
 
-@Autonomous(name = "Auto Blue 18 Ball")
-public class Blue18Ball extends OpMode {
+@Autonomous(name = "Auto Blue 18 Ball", preselectTeleOp = "Tele")
+public class Blue18Ball extends GreenLinearOpMode {
+    @Override
+    public void telemetry(Telemetry tele) {
+
+    }
+
     public static class Paths {
 
         public PathChain Preload;
@@ -178,6 +190,8 @@ public class Blue18Ball extends OpMode {
         }
     }
 
+    private boolean toggle = false;
+
     private IntakeA intake;
     private OuttakeA outtake;
     private Follower follower;
@@ -251,7 +265,7 @@ public class Blue18Ball extends OpMode {
                 if (pathTimer.getElapsedTimeSeconds()<0.25) outtake.setOuttakeState(OuttakeA.OuttakeState.REV);
                 else outtake.setOuttakeState(OuttakeA.OuttakeState.SPIN_UP);
                 if (pathTimer.getElapsedTimeSeconds()< 0.34 && Objects.equals(prevState, "Preload")) {
-                    outtake.setTarget_Vel(1720);
+                    outtake.setTarget_Vel(1600);
                 }
                 else if (Objects.equals(prevState, "Preload")) outtake.setTarget_Vel(1580);
                 else outtake.setTarget_Vel(Storage.autoAimFlywheelPow);
@@ -396,7 +410,7 @@ public class Blue18Ball extends OpMode {
     }
 
     @Override
-    public void init() {
+    public void initialize() {
         pathTimer = new Timer();
         opModeTimer = new Timer();
         intake = new IntakeA(hardwareMap);
@@ -405,19 +419,20 @@ public class Blue18Ball extends OpMode {
         paths = new Paths(follower);
         follower.setPose(new Pose(18, 120, Math.toRadians(144)));
         pathState = PathState.PRELOAD;
+
+        Globals.alliance = Alliance.BLUE;
     }
 
     @Override
-    public void start() {
-        opModeTimer.resetTimer();
-        setPathState(PathState.PRELOAD);
-        intake.setIntakeState(IntakeA.IntakeState.INTAKE_IN);
-        outtake.setTarget_Vel(1820);
-        outtake.setOuttakeState(OuttakeA.OuttakeState.REV);
-    }
-
-    @Override
-    public void loop() {
+    public void periodic() {
+        if(!toggle){
+            opModeTimer.resetTimer();
+            setPathState(PathState.PRELOAD);
+            intake.setIntakeState(IntakeA.IntakeState.INTAKE_IN);
+            outtake.setTarget_Vel(1820);
+            outtake.setOuttakeState(OuttakeA.OuttakeState.REV);
+            toggle = true;
+        }
         follower.update();
         statePathUpdate();
         outtake.periodic();
@@ -430,17 +445,18 @@ public class Blue18Ball extends OpMode {
         telemetry.addData("Heading", follower.getPose().getHeading());
         telemetry.update();
     }
+
     @Override
-    public void stop() {
+    public void end() {
         if (intake != null) {
             intake.setIntakeState(IntakeA.IntakeState.IDLE);
-            intake.periodic(); // Ensure the command is sent to the motor
+            intake.periodic();
         }
         if (outtake != null) {
             outtake.setOuttakeState(OuttakeA.OuttakeState.OFF);
-            outtake.periodic(); // Ensure the command is sent to the motor
+            outtake.periodic();
         }
-        Storage.isRed=false;
+
         Storage.lastPose = follower.getPose();
     }
 }

@@ -91,6 +91,10 @@ public class Robot {
         }
     }
 
+    public void clear(){
+        subsystems.clear();
+    }
+
     // call this after every op mode
     public static void kill() {
         instance = null;

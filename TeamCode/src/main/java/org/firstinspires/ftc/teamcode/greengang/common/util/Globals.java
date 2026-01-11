@@ -29,11 +29,11 @@ public class Globals {
     public static double voltage = 13.0;
 
     public static double ROBOT_CENTER_TO_FRONT = 9;
-    public static double GOAL_BACK_TO_FRONT_BLUE = 12.25;
-    public static double GOAL_BACK_TO_FRONT_RED = 16.23;
+    public static double GOAL_BACK_TO_FRONT_BLUE = 16.9;
+    public static double GOAL_BACK_TO_FRONT_RED = 19.64;
 
-    public static Pose relocalizeBlue = new Pose(135, 9, 0);
-    public static Pose relocalizeRed = new Pose(9, 9, 180);
+    public static Pose relocalizeBlue = new Pose(18, 120, Math.toRadians(144));
+    public static Pose relocalizeRed = new Pose(126, 120, Math.toRadians(36));
 
     public static String frontLeft = "leftFront";
     public static String frontRight = "rightFront";

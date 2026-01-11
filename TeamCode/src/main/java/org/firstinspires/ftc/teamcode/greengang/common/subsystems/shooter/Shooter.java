@@ -56,6 +56,8 @@ public class Shooter implements GreenSubsystem, Subsystem {
         flywheel2.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
         hoodServo.setPosition(DEFAULT_HOOD_POSITION);
+
+        state = State.IDLE;
     }
 
     public void increaseVelocity(double increment){
@@ -121,6 +123,8 @@ public class Shooter implements GreenSubsystem, Subsystem {
         tele.addData("State", state);
         tele.addData("velocity", velocity);
         tele.addData("target velocity", state == State.AUTO ? target : DEFAULT_VELOCITY);
+        tele.addData("flywheel1 Power",flywheel1.getPower());
+        tele.addData("flywheel2 Power",flywheel2.getPower());
     }
 }
 

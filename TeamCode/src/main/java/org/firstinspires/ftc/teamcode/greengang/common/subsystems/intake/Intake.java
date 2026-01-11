@@ -26,6 +26,8 @@ public class Intake implements GreenSubsystem, Subsystem {
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intake");
         hardstop = hardwareMap.get(Servo.class, "hardstop");
 
+        intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        intakeMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         state = State.IDLE;
     }
 
@@ -34,7 +36,6 @@ public class Intake implements GreenSubsystem, Subsystem {
         intakeMotor.setPower(0);
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         retractHardstop();
-        in();
     }
 
     public void stop(){
@@ -69,6 +70,7 @@ public class Intake implements GreenSubsystem, Subsystem {
     @Override
     public void telemetry(Telemetry tele){
         tele.addData("Intake State:", state);
+        tele.addData("Intake Power",intakeMotor.getPower());
     }
 }
 

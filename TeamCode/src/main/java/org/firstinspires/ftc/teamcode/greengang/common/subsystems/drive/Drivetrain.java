@@ -17,6 +17,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.teamcode.greengang.GlobalsStorage.Storage;
 import org.firstinspires.ftc.teamcode.greengang.common.util.AprilTagMap;
 import org.firstinspires.ftc.teamcode.greengang.common.util.GreenSubsystem;
 import org.firstinspires.ftc.teamcode.greengang.common.util.Globals;
@@ -158,7 +159,7 @@ public class Drivetrain implements GreenSubsystem, Subsystem {
 
     @Override
     public void init() {
-        follower.setStartingPose(Globals.startPose);
+        follower.setStartingPose(Storage.lastPose);
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

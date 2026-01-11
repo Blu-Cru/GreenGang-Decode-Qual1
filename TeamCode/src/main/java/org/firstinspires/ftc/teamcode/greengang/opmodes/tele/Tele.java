@@ -3,11 +3,15 @@ package org.firstinspires.ftc.teamcode.greengang.opmodes.tele;
 import static org.firstinspires.ftc.teamcode.greengang.common.subsystems.shooter.ShooterData.velocityFromDistance;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.pedropathing.follower.Follower;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.sfdev.assembly.state.StateMachine;
 import com.sfdev.assembly.state.StateMachineBuilder;
 
@@ -19,6 +23,7 @@ import org.firstinspires.ftc.teamcode.greengang.common.commands.controls.shooter
 import org.firstinspires.ftc.teamcode.greengang.common.commands.intake.IntakeCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.commands.shoot.KickBallCommand;
 import org.firstinspires.ftc.teamcode.greengang.common.subsystems.shooter.Shooter;
+import org.firstinspires.ftc.teamcode.greengang.common.subsystems.shooter.ShooterData;
 import org.firstinspires.ftc.teamcode.greengang.common.util.Alliance;
 import org.firstinspires.ftc.teamcode.greengang.common.util.Globals;
 import org.firstinspires.ftc.teamcode.greengang.opmodes.GreenLinearOpMode;
@@ -39,6 +44,8 @@ public class Tele extends GreenLinearOpMode {
 
     public double targetDistance = 0;
     public double autoAimTargetVelocity = 0;
+
+    public boolean start = false;
 
 
     public double DEADZONE = 0.2;
@@ -79,12 +86,45 @@ public class Tele extends GreenLinearOpMode {
 
     @Override
     public void initialize() {
+        robot.clear();
+        CommandScheduler.getInstance().reset();
+        String[] motors = {
+                "intake",
+                "flywheel1",
+                "flywheel2",
+                Globals.backLeft,
+                Globals.backRight,
+                Globals.frontLeft,
+                Globals.frontRight,
+        };
+
+        for (String name : motors) {
+            DcMotorEx m = hardwareMap.get(DcMotorEx.class, name);
+            m.setPower(0);
+            m.setVelocity(0);
+            m.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            m.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        }
+
+        Servo[] servos = {
+                hardwareMap.get(Servo.class, "hardstop"),
+                hardwareMap.get(Servo.class, "hood"),
+                hardwareMap.get(Servo.class, "kicker")
+        };
+        for (Servo s : servos) {
+            s.setPosition(0);
+        }
+
         addDrivetrain();
         addShooter();
         addStickyG1();
         addStickyG2();
         addKicker();
         addIntake();
+
+        intake.stop();
+        shooter.stop();
 
         follower = drivetrain.follower;
 
@@ -175,7 +215,20 @@ public class Tele extends GreenLinearOpMode {
     }
 
     @Override
+    public void onStart() {
+        shooter.stop();
+        intake.stop();
+    }
+
+    @Override
     public void periodic() {
+        if(!start){
+            shooter.stop();
+            intake.stop();
+
+            start = true;
+        }
+
         sm.update();
         follower = drivetrain.follower;
 
@@ -217,6 +270,13 @@ public class Tele extends GreenLinearOpMode {
             } else {
                 drivetrain.relocalize(Globals.relocalizeBlue);
             }
+
+            gamepad2.rumble(10);
+            gamepad1.rumble(10);
+        }
+
+        if(stickyG2.a){
+            ShooterData.useLookupTable = !ShooterData.useLookupTable;
         }
     }
 
@@ -225,5 +285,6 @@ public class Tele extends GreenLinearOpMode {
         tele.addData("State", state);
         tele.addData("Lock", Globals.autoAimEnabled ? "ON" : "START");
         tele.addData("Target Distance", targetDistance);
+        tele.addData("USING LOOKUP TABLE:", ShooterData.useLookupTable);
     }
 }

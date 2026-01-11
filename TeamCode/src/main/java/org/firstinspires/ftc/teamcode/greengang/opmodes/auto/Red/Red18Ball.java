@@ -9,16 +9,21 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commonA.intakeA.IntakeA;
 import org.firstinspires.ftc.teamcode.commonA.outtakeA.OuttakeA;
 import org.firstinspires.ftc.teamcode.greengang.GlobalsStorage.Storage;
+import org.firstinspires.ftc.teamcode.greengang.common.util.Alliance;
+import org.firstinspires.ftc.teamcode.greengang.common.util.Globals;
+import org.firstinspires.ftc.teamcode.greengang.opmodes.GreenLinearOpMode;
+import org.firstinspires.ftc.teamcode.greengang.opmodes.auto.Blue.Blue18Ball;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import java.util.Objects;
 
 
-@Autonomous(name = "Auto Red 18 Ball")
-public class Red18Ball extends OpMode {
+@Autonomous(name = "Auto Red 18 Ball", preselectTeleOp = "Tele")
+public class Red18Ball extends GreenLinearOpMode {
     public static class Paths {
 
         public PathChain Preload;
@@ -36,10 +41,10 @@ public class Red18Ball extends OpMode {
         public Pose spike2Entry = new Pose(144 - 60, 59.5, Math.toRadians(180 - 180));
         public Pose spike2PickUp = new Pose(144 - 9.32, 57.13, Math.toRadians(180 - 180));
         public Pose gateCycle = new Pose(144 - 9.6, 57.9, Math.toRadians(180 - 154.3));
-        public Pose spike1Entry = new Pose(144 - 60, 85.5, Math.toRadians(180 - 180));
-        public Pose spike1PickUp = new Pose(144 - 14.3, 87, Math.toRadians(180 - 180));
-        public Pose spike3Entry = new Pose(85, 41.4, Math.toRadians(0));
-        public Pose spike3PickUp = new Pose(135, 38.7, Math.toRadians(-2));
+        public Pose spike1Entry = new Pose(144 - 60, 85, Math.toRadians(180 - 180));
+        public Pose spike1PickUp = new Pose(144 - 14.3, 86.4, Math.toRadians(180 - 180));
+        public Pose spike3Entry = new Pose(85, 40.7, Math.toRadians(0));
+        public Pose spike3PickUp = new Pose(135, 38, Math.toRadians(-2));
         public Pose parkPose = new Pose(144 - 21, 95, Math.toRadians(180 - 135));
 
 
@@ -174,6 +179,8 @@ public class Red18Ball extends OpMode {
     private Timer pathTimer, opModeTimer;
     private Paths paths;
     private double gateCount = 0;
+
+    private boolean toggle = false;
 
     public enum PathState {
         PRELOAD,
@@ -355,7 +362,7 @@ public class Red18Ball extends OpMode {
     }
 
     @Override
-    public void init() {
+    public void initialize() {
         pathTimer = new Timer();
         opModeTimer = new Timer();
         intake = new IntakeA(hardwareMap);
@@ -364,32 +371,35 @@ public class Red18Ball extends OpMode {
         paths = new Paths(follower);
         follower.setPose(new Pose(144 - 18, 120, Math.toRadians(180 - 144)));
         pathState = PathState.PRELOAD;
+
+        Globals.alliance = Alliance.RED;
     }
 
     @Override
-    public void start() {
-        opModeTimer.resetTimer();
-        setPathState(PathState.PRELOAD);
-        intake.setIntakeState(IntakeA.IntakeState.INTAKE_IN);
-        outtake.setTarget_Vel(1820);
-        outtake.setOuttakeState(OuttakeA.OuttakeState.REV);
-    }
-
-    @Override
-    public void loop() {
+    public void periodic() {
+        if(!toggle){
+            opModeTimer.resetTimer();
+            setPathState(PathState.PRELOAD);
+            intake.setIntakeState(IntakeA.IntakeState.INTAKE_IN);
+            outtake.setTarget_Vel(1820);
+            outtake.setOuttakeState(OuttakeA.OuttakeState.REV);
+            toggle = true;
+        }
         follower.update();
         statePathUpdate();
         outtake.periodic();
         intake.periodic();
 
         telemetry.addData("State", pathState);
+        //telemetry.addData("Spike Count", spikeCount);
         telemetry.addData("X", follower.getPose().getX());
         telemetry.addData("Y", follower.getPose().getY());
         telemetry.addData("Heading", follower.getPose().getHeading());
         telemetry.update();
     }
+
     @Override
-    public void stop() {
+    public void end() {
         if (intake != null) {
             intake.setIntakeState(IntakeA.IntakeState.IDLE);
             intake.periodic();
@@ -400,5 +410,10 @@ public class Red18Ball extends OpMode {
         }
         Storage.isRed=false;
         Storage.lastPose = follower.getPose();
+    }
+
+    @Override
+    public void telemetry(Telemetry tele) {
+
     }
 }

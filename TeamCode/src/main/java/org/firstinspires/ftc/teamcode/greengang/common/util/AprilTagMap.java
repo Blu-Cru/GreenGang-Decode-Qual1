@@ -5,9 +5,9 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public class AprilTagMap {
     public static double BLUE_CORNER_X = 0;
-    public static double BLUE_CORNER_Y = 134;
+    public static double BLUE_CORNER_Y = 135;
 
-    public static double RED_CORNER_X = 134;
+    public static double RED_CORNER_X = 144;
     public static double RED_CORNER_Y = 144;
 
     public static double[] getDistanceXY(double x, double y) {
